@@ -35,7 +35,7 @@ void Application::Menu()
 	case MenuItem::MENU_QUIT: Quit();
 		break;
 	case MenuItem::MENU_PREFIX_CHECKER:
-		if ( !PrefixChecker::Start() ) cout << "Couldn't Run Prefix Checker..." << endl;
+		if ( !PrefixChecker::Start() ) cout << "Couldn't Run Prefix Checker..." << endl << endl;
 
 	case MenuItem::MENU_EXTENSION_CHECKER:
 	case MenuItem::MENU_RUN_ALL:

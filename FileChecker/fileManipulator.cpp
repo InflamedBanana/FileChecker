@@ -30,7 +30,7 @@ namespace FileManipulator
 	{
 		set<fs::path> files;
 
-		for (const auto& file : fs::recursive_directory_iterator(directory))
+		for ( auto& file : fs::recursive_directory_iterator(directory))
 		{
 			if ( exceptions != nullptr && exceptions->find(file) != exceptions->end() )
 				continue;
@@ -41,10 +41,13 @@ namespace FileManipulator
 		return files;
 	}
 
-	bool RenameFile(const fs::path &filePath, const string &newName)
+	bool RenameFile(const fs::path &filePath, const string &newName, const bool &addExtension)
 	{
 		std::string newFileName(newName);
-		newFileName.append(filePath.extension().string());
+
+		if( addExtension )
+			newFileName.append( filePath.extension().string() );
+
 		return MoveFile(filePath, fs::path(filePath).replace_filename(newFileName) );
 	}
 	bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
@@ -52,7 +55,6 @@ namespace FileManipulator
 		error_code error;
 		fs::rename(filePath, destinationPath, error);
 
-		//return ( error.value == 0 );
-		return true;
+		return ( error.value() == 0 );
 	}
 }
