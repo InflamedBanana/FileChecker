@@ -14,7 +14,7 @@ namespace FileManipulator
 	std::set<fs::path> GetDirectoriesAtPath(const std::string &directory);
 	std::set<fs::path> GetAllFilesInRecursiveDirectory(const std::string &directory, const std::set<fs::path> *exceptions = nullptr );
 	bool MoveFile(const fs::path &file, const fs::path &destination);
-	bool RenameFile(const fs::path &file, const std::string &newName);
+	bool RenameFile(const fs::path &file, const std::string &newName, const bool &addExtension = false);
 };
 
 #endif // !DEF_FILEMANIP

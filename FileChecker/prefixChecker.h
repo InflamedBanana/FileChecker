@@ -19,15 +19,17 @@ public:
 	static void Stop();
 	static PrefixChecker* GetInstance() { return s_prefixChkr; }
 
-	int Status() { return m_status; }
+	//int Status() { return m_status; }
 
 private:
 
 	void Run();
-	bool CheckPrefix(const std::string &file);
-	void ChangePrefix(std::string &file);
+	bool CheckPrefix(const std::string &fileName);
+	bool ChangePrefix(fs::path &file);
 
 	int m_status;
+	std::string prefix = PREFIXCHKR_PREFIX;//Change variables with config file
+	bool doChangePrefix = true;//Change variables with config file
 };
 
 #endif // !DEF_PREFIXCHECK
