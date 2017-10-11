@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{2028D7A8-18DE-4074-806F-B74D41F50D7E}</ProjectGuid>
     <RootNamespace>FileChecker</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="application.cpp" />
     <ClCompile Include="fileManipulator.cpp" />
+    <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PrefixChecker.cpp" />
   </ItemGroup>
@@ -120,6 +121,7 @@
     <ClInclude Include="application.h" />
     <ClInclude Include="extensionChecker.h" />
     <ClInclude Include="fileManipulator.h" />
+    <ClInclude Include="JsonParser.h" />
     <ClInclude Include="prefixChecker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

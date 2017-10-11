@@ -22,7 +22,6 @@ public:
 	//int Status() { return m_status; }
 
 private:
-
 	void Run();
 	bool CheckPrefix(const std::string &fileName);
 	bool ChangePrefix(fs::path &file);
