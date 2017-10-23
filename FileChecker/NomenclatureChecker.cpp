@@ -1,37 +1,33 @@
-#include <direct.h>
 #include <iostream>
 #include <string>
-#include "prefixChecker.h"
+#include "nomenclatureChecker.h"
 #include "fileManipulator.h"
-#include <set>
 
-//using namespace std;
+NomenclatureChecker::NomenclatureChecker() : m_status(0) {}
 
-PrefixChecker::PrefixChecker() : m_status(0) {}
+NomenclatureChecker::~NomenclatureChecker() {}
 
-PrefixChecker::~PrefixChecker() {}
-
-PrefixChecker* PrefixChecker::s_prefixChkr = nullptr;
+NomenclatureChecker* NomenclatureChecker::s_prefixChkr = nullptr;
 
 
-bool PrefixChecker::Start()
+bool NomenclatureChecker::Start()
 {
 	if (s_prefixChkr == nullptr)
 	{
-		s_prefixChkr = new PrefixChecker;
+		s_prefixChkr = new NomenclatureChecker;
 		s_prefixChkr->Run();
 		return true;
 	}
 	return false;
 }
 
-void PrefixChecker::Stop()
+void NomenclatureChecker::Stop()
 {
 	delete s_prefixChkr;
 	s_prefixChkr = nullptr;
 }
 
-void PrefixChecker::Run()
+void NomenclatureChecker::Run()
 {
 	int nbOfFiles(0), nbOfWrongFileName(0), nbOfRenamedFiles(0);
 
@@ -59,12 +55,12 @@ void PrefixChecker::Run()
 	Stop();
 }
 
-bool PrefixChecker::CheckPrefix(const std::string &fileName)
+bool NomenclatureChecker::CheckPrefix(const std::string &fileName)
 {
 	return (fileName.find(prefix) == 0 );
 }
 
-bool PrefixChecker::ChangePrefix(fs::path &file)
+bool NomenclatureChecker::ChangePrefix(fs::path &file)
 {
 	std::string newName(prefix);
 	newName.append(file.filename().string());

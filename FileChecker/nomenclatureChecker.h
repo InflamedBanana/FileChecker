@@ -7,17 +7,17 @@
 #include <string>
 #include "fileManipulator.h"
 
-class PrefixChecker
+class NomenclatureChecker
 {
-	static PrefixChecker* s_prefixChkr;
+	static NomenclatureChecker* s_prefixChkr;
 
 public:
-	PrefixChecker();
-	~PrefixChecker();
+	NomenclatureChecker();
+	~NomenclatureChecker();
 
 	static bool Start();
 	static void Stop();
-	static PrefixChecker* GetInstance() { return s_prefixChkr; }
+	static NomenclatureChecker* GetInstance() { return s_prefixChkr; }
 
 	//int Status() { return m_status; }
 

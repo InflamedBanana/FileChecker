@@ -1,10 +1,9 @@
 #pragma once
 
-#ifndef DEF_DIRECTORYCONF
+/*#ifndef DEF_DIRECTORYCONF
 #define DEF_DIRECTORYCONF
 
 #include <experimental\filesystem>
-#include <rapidjson\document.h>
 
 namespace fs = std::experimental::filesystem;
 
@@ -27,30 +26,34 @@ private:
 	fs::path m_directoryPath;
 };
 
-#endif // !DEF_DIRECTORYCONF
+#endif // !DEF_DIRECTORYCONF*/
 
 #ifndef DEF_SETTINGS
 #define DEF_SETTINGS
 
-namespace fs = std::experimental::filesystem;
+#include <rapidjson\document.h>
+
+//namespace fs = std::experimental::filesystem;
 
 class Settings
 {
-	static Settings* s_instance;
+	//static Settings* s_instance;
 
 public:
-	Settings();
+	Settings(const std::string& filePath);
 	~Settings();
 
-	static Settings* GetInstance() { return s_instance; };
-	const DirectoryConfig* GetDirectoryConfig( const fs::path &directoryPath);//filesettings
-	//faut un const pointer
-private:
-	void LoadSettings();
-	DirectoryConfig& CreateDirectoryConfig();
+	const rapidjson::Document* GetSettings() { return m_settings; };
 
-	std::vector<DirectoryConfig> m_directoriesConfigs; // DirectorySettings
+	//static Settings* GetInstance() { return s_instance; };
+	//const DirectoryConfig* GetDirectoryConfig( const fs::path &directoryPath);
+
+private:
+	void LoadSettings(const std::string& filePath);
+	const rapidjson::Document* m_settings;
+	//DirectoryConfig& CreateDirectoryConfig();
+
+	//std::vector<DirectoryConfig> m_directoriesConfigs; // DirectorySettings
 };
 
 #endif
-

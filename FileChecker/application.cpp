@@ -1,20 +1,29 @@
 #include "application.h"
-#include "prefixChecker.h"
+#include "nomenclatureChecker.h"
 #include <iostream>
 
 using namespace std;
 
 Application* Application::s_app = nullptr;
+Settings* Application::s_settings = nullptr;
 
 Application::Application(): m_menuChoice(MenuItem::MENU_NULL),m_isQuitting(false){}
 
-Application::~Application(){}
+Application::~Application()
+{
+	delete s_settings;
+	s_settings = nullptr;
+	/*delete s_app;
+	s_app = nullptr;*/
+}
 
 
 bool Application::Start()
 {
+	// look if this should be in constructor instead...
 	if (s_app == nullptr)
 	{
+		s_settings = new Settings(CONFIG_FILE_PATH);
 		s_app = new Application;
 		s_app->Menu();
 		return true;
@@ -32,8 +41,8 @@ void Application::Menu()
 
 	case MenuItem::MENU_QUIT: Quit();
 		break;
-	case MenuItem::MENU_PREFIX_CHECKER:
-		if ( !PrefixChecker::Start() ) cout << "Couldn't Run Prefix Checker..." << endl << endl;
+	case MenuItem::MENU_NOMENCLATURE_CHECKER:
+		if ( !NomenclatureChecker::Start() ) cout << "Couldn't Run Prefix Checker..." << endl << endl;
 
 	case MenuItem::MENU_EXTENSION_CHECKER:
 	case MenuItem::MENU_RUN_ALL:
@@ -59,7 +68,7 @@ Application::MenuItem Application::ChooseAction()
 		 
 		switch (input)
 		{
-		case '1': return MenuItem::MENU_PREFIX_CHECKER;
+		case '1': return MenuItem::MENU_NOMENCLATURE_CHECKER;
 		case '2': return MenuItem::MENU_EXTENSION_CHECKER;
 		case '3': return MenuItem::MENU_RUN_ALL;
 		case '4': return MenuItem::MENU_QUIT;
