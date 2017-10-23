@@ -19,7 +19,6 @@ bool Application::Start()
 		s_app->Menu();
 		return true;
 	}
-
 	return false;
 }
 
