@@ -122,6 +122,7 @@
     <ClInclude Include="application.h" />
     <ClInclude Include="extensionChecker.h" />
     <ClInclude Include="fileManipulator.h" />
+    <ClInclude Include="Status.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="JsonParser.h" />
     <ClInclude Include="nomenclatureChecker.h" />

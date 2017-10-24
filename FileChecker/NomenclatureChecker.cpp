@@ -2,20 +2,23 @@
 #include <string>
 #include "nomenclatureChecker.h"
 #include "fileManipulator.h"
+#include <vector>
 
-NomenclatureChecker::NomenclatureChecker() : m_status(0) {}
+NomenclatureChecker::NomenclatureChecker() : m_status(APP_Status::S_STARTED) {}
 
 NomenclatureChecker::~NomenclatureChecker() {}
 
-NomenclatureChecker* NomenclatureChecker::s_prefixChkr = nullptr;
+NomenclatureChecker* NomenclatureChecker::s_nomenclatureChkr = nullptr;
 
 
-bool NomenclatureChecker::Start()
+bool NomenclatureChecker::Start( Settings* settings)
 {
-	if (s_prefixChkr == nullptr)
+	if (settings == nullptr) return false;
+
+	if (s_nomenclatureChkr == nullptr)
 	{
-		s_prefixChkr = new NomenclatureChecker;
-		s_prefixChkr->Run();
+		s_nomenclatureChkr = new NomenclatureChecker;
+		s_nomenclatureChkr->Run( settings );
 		return true;
 	}
 	return false;
@@ -23,13 +26,17 @@ bool NomenclatureChecker::Start()
 
 void NomenclatureChecker::Stop()
 {
-	delete s_prefixChkr;
-	s_prefixChkr = nullptr;
+	s_nomenclatureChkr->m_status = APP_Status::S_STOPPED;
+	delete s_nomenclatureChkr;
+	s_nomenclatureChkr = nullptr;
 }
 
-void NomenclatureChecker::Run()
+void NomenclatureChecker::Run( Settings* settings)
 {
-	int nbOfFiles(0), nbOfWrongFileName(0), nbOfRenamedFiles(0);
+	m_status = APP_Status::S_RUNNING;
+
+	Stop();
+	/* nbOfFiles(0), nbOfWrongFileName(0), nbOfRenamedFiles(0);
 
 	for (auto file : FileManipulator::GetAllFilesInRecursiveDirectory("./"))
 	{
@@ -52,10 +59,10 @@ void NomenclatureChecker::Run()
 	std::cout << std::endl << "-- Nb of renamed files : " << nbOfRenamedFiles << " --" << std::endl;
 
 	system("PAUSE");
-	Stop();
+	Stop();*/
 }
 
-bool NomenclatureChecker::CheckPrefix(const std::string &fileName)
+/*bool NomenclatureChecker::CheckPrefix(const std::string &fileName)
 {
 	return (fileName.find(prefix) == 0 );
 }
@@ -65,4 +72,4 @@ bool NomenclatureChecker::ChangePrefix(fs::path &file)
 	std::string newName(prefix);
 	newName.append(file.filename().string());
 	return FileManipulator::RenameFile( file, newName );
-}
+}*/

@@ -1,0 +1,60 @@
+{
+	"FileChecker configs":
+	{
+		"Nomenclature":
+		{
+			"Nomenclature": ["Prefix","Type","Name"],
+			"Separator" : "_",
+			"Definitions":
+			{
+				"Prefix": [""],
+				"Type" : [""],
+				"Name" : [""]
+			}
+		},
+
+		"FileValidation":
+		{
+			"CheckByNomenclature": true,
+			"CheckByExtension":true
+		},
+
+		"MoveDirectory":
+		{
+			"Path" : "../Bin/"
+		}
+	},
+
+	"Arborescence":
+	{
+		"StartPath":"../",
+		"Directories":
+		[
+			{
+				"Name":"FileChecker",
+				"ExcludeFromNomenclatureCheck" : true,
+				"ExcludeFromExtensionCheck" : true,
+				"NomenclatureRestrict" :
+				[
+				],
+				"ExtensionRestrict" :
+				[
+				],
+				"Directories" : []
+			},
+
+			{
+				"Name":"Bin",
+				"ExcludeFromNomenclatureCheck" : true,
+				"ExcludeFromExtensionCheck" : true, 
+				"NomenclatureRestrict" :
+				[
+				],
+				"ExtensionRestrict" :
+				[
+				],
+				"Directories" : []
+			}
+		]
+	}
+}

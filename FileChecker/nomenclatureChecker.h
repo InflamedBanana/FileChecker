@@ -1,34 +1,36 @@
 #pragma once
-#ifndef DEF_PREFIXCHECK
-#define DEF_PREFIXCHECK
+#ifndef DEF_NOMENCLATURECHECK
+#define DEF_NOMENCLATURECHECK
 
 #define PREFIXCHKR_PREFIX "DyD_"
 
 #include <string>
 #include "fileManipulator.h"
+#include "settings.h"
+#include "Status.h"
 
 class NomenclatureChecker
 {
-	static NomenclatureChecker* s_prefixChkr;
+	static NomenclatureChecker* s_nomenclatureChkr;
 
 public:
 	NomenclatureChecker();
 	~NomenclatureChecker();
 
-	static bool Start();
+	static bool Start( Settings* settings);
 	static void Stop();
-	static NomenclatureChecker* GetInstance() { return s_prefixChkr; }
+	static NomenclatureChecker* GetInstance() { return s_nomenclatureChkr; }
 
-	//int Status() { return m_status; }
+	APP_Status GetStatus() { return m_status; }
 
 private:
-	void Run();
-	bool CheckPrefix(const std::string &fileName);
-	bool ChangePrefix(fs::path &file);
+	void Run(Settings* settings);
+	/*bool CheckPrefix(const std::string &fileName);
+	bool ChangePrefix(fs::path &file);*/
 
-	int m_status;
-	std::string prefix = PREFIXCHKR_PREFIX;//Change variables with config file
-	bool doChangePrefix = true;//Change variables with config file
+	APP_Status m_status;
+	//std::string prefix = PREFIXCHKR_PREFIX;//Change variables with config file
+	//bool doChangePrefix = true;//Change variables with config file
 };
 
-#endif // !DEF_PREFIXCHECK
+#endif
