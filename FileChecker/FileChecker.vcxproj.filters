@@ -38,9 +38,6 @@
     <ClInclude Include="application.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="extensionChecker.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="fileManipulator.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

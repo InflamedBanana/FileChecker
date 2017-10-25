@@ -9,17 +9,18 @@
 class Application
 {
 	static Application* s_application;
-	static Settings* s_settings;
+	//static Settings* s_settings;
 
 public:
 	Application();
 	~Application();
 
+	APP_Status GetStatus() { return m_status; }
+	Settings& GetSettings() { return m_settings; }
+
 	static bool Start();
 	static void Quit();
 	static Application* GetInstance() { return s_application; }
-	static Settings* GetSettings() { return s_settings; }
-	APP_Status GetStatus() { return m_status; }
 
 private:
 	enum MenuItem
@@ -32,10 +33,12 @@ private:
 		MENU_QUIT,
 	};
 
+
 	void Menu();
 	MenuItem ChooseAction();
 	void ShowSettings();
 
+	Settings m_settings;
 	MenuItem m_menuChoice;
 	APP_Status m_status;
 };

@@ -1,20 +1,21 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "nomenclatureChecker.h"
 #include "fileManipulator.h"
 #include <vector>
 
-NomenclatureChecker::NomenclatureChecker() : m_status(APP_Status::S_STARTED) {}
+using namespace std;
+
+NomenclatureChecker::NomenclatureChecker() : m_status(APP_Status::S_STARTED), m_nbOfFilesChecked(0),
+											m_nbOfWrongFiles(0){}
 
 NomenclatureChecker::~NomenclatureChecker() {}
 
 NomenclatureChecker* NomenclatureChecker::s_nomenclatureChkr = nullptr;
 
-
-bool NomenclatureChecker::Start( Settings* settings)
+bool NomenclatureChecker::Start( Settings& settings)
 {
-	if (settings == nullptr) return false;
-
 	if (s_nomenclatureChkr == nullptr)
 	{
 		s_nomenclatureChkr = new NomenclatureChecker;
@@ -31,45 +32,69 @@ void NomenclatureChecker::Stop()
 	s_nomenclatureChkr = nullptr;
 }
 
-void NomenclatureChecker::Run( Settings* settings)
+void NomenclatureChecker::Run( Settings& settings)
 {
 	m_status = APP_Status::S_RUNNING;
+	
+	for (auto& directory : *(settings.GetDirectoriesArborescence())) //every root directories
+		CheckDirectory(settings.GetArborescenceStartPath(), directory, settings);
+
+	cout << endl << "Number of files checked : " << m_nbOfFilesChecked << '.' << endl;
+	cout << "Number of wrong files : " << m_nbOfWrongFiles << '.' << endl;
 
 	Stop();
-	/* nbOfFiles(0), nbOfWrongFileName(0), nbOfRenamedFiles(0);
+}
 
-	for (auto file : FileManipulator::GetAllFilesInRecursiveDirectory("./"))
+void NomenclatureChecker::CheckDirectory(fs::path path, Settings::DirectoryConfig& directory, Settings& settings)
+{
+	path / directory.name / "/";
+
+	if (!directory.excludeFromNomenclatureCheck)
 	{
-		std::cout << file << std::endl;
-		++nbOfFiles;
-
-		if ( !CheckPrefix(file.filename().string() ) )
+		for (auto& file : FileManipulator::GetFilesInDirectory(path.string()))
 		{
-			++nbOfWrongFileName;
-			if (doChangePrefix)
+			if (!CompareNomenclature(file, settings))
 			{
-				++nbOfRenamedFiles;
-				ChangePrefix(file);
+				FileManipulator::MoveFile(file, fs::path(settings.GetMoveDirectoryPath()) / file.filename());
+				++m_nbOfWrongFiles;
 			}
+			
+			cout << file.string() << endl;
+			++m_nbOfFilesChecked;
 		}
 	}
 
-	std::cout << std::endl << "-- Nb of files checked : " << nbOfFiles << " --" << std::endl;
-	std::cout << std::endl << "-- Nb of wrong file names : " << nbOfWrongFileName << " --" << std::endl;
-	std::cout << std::endl << "-- Nb of renamed files : " << nbOfRenamedFiles << " --" << std::endl;
-
-	system("PAUSE");
-	Stop();*/
+	for (auto& subDirectory : directory.subDirectories)
+		CheckDirectory(path, subDirectory, settings);
 }
 
-/*bool NomenclatureChecker::CheckPrefix(const std::string &fileName)
+bool NomenclatureChecker::CompareNomenclature(const fs::path &file, Settings &settings)
 {
-	return (fileName.find(prefix) == 0 );
+	vector<string> fileName(SplitFileName(file, settings));
+
+	for (int i = 0; i < settings.GetNomenclatureConfig()->nomenclature.size(); ++i)
+	{
+		if (i >= fileName.size()) return false;
+		if (settings.GetNomenclatureConfig()->definitions[i].size() == 0) return true;
+
+		bool isBadlyNamed(true);
+
+		for (const auto& nDef : settings.GetNomenclatureConfig()->definitions[i])
+			if (fileName[i].compare(nDef) == 0) isBadlyNamed = false;
+
+		if (isBadlyNamed) return false;
+	}
+	return true;
 }
 
-bool NomenclatureChecker::ChangePrefix(fs::path &file)
+vector<string> NomenclatureChecker::SplitFileName(const fs::path &file, Settings &settings)
 {
-	std::string newName(prefix);
-	newName.append(file.filename().string());
-	return FileManipulator::RenameFile( file, newName );
-}*/
+	vector<string> fileNameParts;
+	istringstream iss(file.filename().string());
+	string temp;
+
+	while (getline(iss, temp, settings.GetNomenclatureConfig()->separator))
+		fileNameParts.push_back(temp);
+
+	return fileNameParts;
+}

@@ -42,11 +42,11 @@ public:
 
 	std::vector<DirectoryConfig>* GetDirectoriesArborescence() { return &m_directoriesArborescence; }
 
-	NomenclatureConfig* GetNomenclatureConfig() { return &m_nomenclatureConfig; }
+	NomenclatureConfig* GetNomenclatureConfig() { return &m_nomenclatureConfig; } // ask if type* function() or type function().
 	FileValidationConfig* GetFileValidationConfig() { return &m_fileValidationConfig; }
 	std::string GetMoveDirectoryPath() { return m_moveDirectoryPath; }
 	std::string GetArborescenceStartPath() { return m_arborescenceStartPath; }
-	std::vector<DirectoryConfig>* GetDirectoryArborescence() { return &m_directoriesArborescence; }
+	std::vector<DirectoryConfig>* GetDirectoryArborescence() { return &m_directoriesArborescence; };
 
 private:
 	void LoadSettings(const std::string& filePath);

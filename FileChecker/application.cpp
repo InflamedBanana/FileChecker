@@ -5,21 +5,19 @@
 using namespace std;
 
 Application* Application::s_application = nullptr;
-Settings* Application::s_settings = nullptr;
 
-Application::Application(): m_menuChoice(MenuItem::MENU_NULL),m_status(APP_Status::S_STARTED){}
+
+Application::Application(): m_menuChoice(MenuItem::MENU_NULL),m_status(APP_Status::S_STARTED)
+							, m_settings(CONFIG_FILE_PATH) {}
 
 Application::~Application()
 {
-	delete s_settings;
-	s_settings = nullptr;
 }
 
 bool Application::Start()
 {
 	if (s_application == nullptr)
 	{
-		s_settings = new Settings(CONFIG_FILE_PATH);
 		s_application = new Application;
 		s_application->Menu();
 		return true;
@@ -40,8 +38,9 @@ void Application::Menu()
 	case MenuItem::MENU_QUIT: Quit();
 		break;
 	case MenuItem::MENU_NOMENCLATURE_CHECKER:
-		if (!NomenclatureChecker::Start(s_settings))
+		if (!NomenclatureChecker::Start(m_settings))
 			cout << "Couldn't Run Prefix Checker..." << endl << endl;
+		Menu(); break;
 	case MenuItem::MENU_SETTINGS:
 		ShowSettings();
 	case MenuItem::MENU_EXTENSION_CHECKER:
@@ -55,8 +54,8 @@ void Application::Menu()
 Application::MenuItem Application::ChooseAction()
 {
 	cout << endl << "======== MENU =======" << endl << endl;
-	cout << "1. Prefix Checker" << endl;
-	cout << "2. Extension Checker" << endl;
+	cout << "1. Nomenclature Check" << endl;
+	cout << "2. Arborescence Check" << endl;
 	cout << "3. Run All" << endl;
 	cout << "4. Settings" << endl;
 	cout << "5. Quit" << endl;
@@ -93,11 +92,11 @@ void Application::ShowSettings()
 
 	string nomenclature;
 
-	for (vector<string>::iterator itr = s_settings->GetNomenclatureConfig()->nomenclature.begin();
-		itr != s_settings->GetNomenclatureConfig()->nomenclature.end(); ++itr)
+	for (vector<string>::iterator itr = m_settings.GetNomenclatureConfig()->nomenclature.begin();
+		itr != m_settings.GetNomenclatureConfig()->nomenclature.end(); ++itr)
 	{
 		nomenclature.append((*itr).begin(), (*itr).end());
-		nomenclature.push_back(s_settings->GetNomenclatureConfig()->separator);
+		nomenclature.push_back(m_settings.GetNomenclatureConfig()->separator);
 	}
 
 	cout << "Nomenclature : " << nomenclature << endl;
@@ -105,8 +104,8 @@ void Application::ShowSettings()
 	{
 		int i(1);
 
-		for (vector<vector<string>>::iterator itr = s_settings->GetNomenclatureConfig()->definitions.begin();
-			itr != s_settings->GetNomenclatureConfig()->definitions.end(); ++itr)
+		for (vector<vector<string>>::iterator itr = m_settings.GetNomenclatureConfig()->definitions.begin();
+			itr != m_settings.GetNomenclatureConfig()->definitions.end(); ++itr)
 		{
 			cout << "Definition " << i << " : " ;
 			for (vector<string>::iterator sitr = itr->begin(); sitr != itr->end(); ++sitr)
@@ -116,13 +115,13 @@ void Application::ShowSettings()
 		}
 	}
 
-	cout << endl << "Check by nomenclature : " << s_settings->GetFileValidationConfig()->checkByNomenclature << endl;
-	cout << "Check by extension : " << s_settings->GetFileValidationConfig()->checkByExtension << endl;
+	cout << endl << "Check by nomenclature : " << m_settings.GetFileValidationConfig()->checkByNomenclature << endl;
+	cout << "Check by extension : " << m_settings.GetFileValidationConfig()->checkByExtension << endl;
 
-	cout << "Move Directory Path : " << s_settings->GetMoveDirectoryPath() << endl;
-	cout << endl << "Arborescence Start Path : " << s_settings->GetArborescenceStartPath() << endl;
-	cout << "nb of directories " << s_settings->GetDirectoryArborescence()->size() << endl;
-	for (vector<Settings::DirectoryConfig>::iterator it = s_settings->GetDirectoryArborescence()->begin();
-		it != s_settings->GetDirectoryArborescence()->end(); ++it)
+	cout << "Move Directory Path : " << m_settings.GetMoveDirectoryPath() << endl;
+	cout << endl << "Arborescence Start Path : " << m_settings.GetArborescenceStartPath() << endl;
+	cout << "nb of directories " << m_settings.GetDirectoryArborescence()->size() << endl;
+	for (vector<Settings::DirectoryConfig>::iterator it = m_settings.GetDirectoryArborescence()->begin();
+		it != m_settings.GetDirectoryArborescence()->end(); ++it)
 		cout << "Directory : " << it->name << endl;
 }

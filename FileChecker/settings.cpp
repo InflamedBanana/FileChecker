@@ -2,24 +2,18 @@
 #include <fstream>
 #include "JsonParser.h"
 #include <iostream>
+#include <memory>
 
 //using namespace std;
 using namespace rapidjson;
 
-//Settings* Settings::s_instance = nullptr;
 
 Settings::Settings(const std::string& filePath)
 {
 	LoadSettings(filePath);
 }
 
-Settings::~Settings()
-{
-	/*delete m_settings;
-	m_settings = nullptr;*/
-}
-
-
+Settings::~Settings(){}
 
 void Settings::LoadSettings(const std::string& filePath)
 {
@@ -32,26 +26,26 @@ void Settings::LoadSettings(const std::string& filePath)
 		std::cout << "Config File created" << std::endl;
 		std::cout << "-------------------" << std::endl << std::endl;
 	}
-	const Document* parsedSettings(JSON_Parser::ParseFile(filePath));
+	Document parsedSettings(JSON_Parser::ParseFile(filePath));
 
-	if (parsedSettings->HasMember("FileChecker configs"))
+	if (parsedSettings.HasMember("FileChecker configs"))
 	{
-		if ((*parsedSettings)["FileChecker configs"].HasMember("Nomenclature"))
+		if (parsedSettings["FileChecker configs"].HasMember("Nomenclature"))
 		{
-			if ((*parsedSettings)["FileChecker configs"]["Nomenclature"].HasMember("Nomenclature"))
+			if (parsedSettings["FileChecker configs"]["Nomenclature"].HasMember("Nomenclature"))
 			{
-				const Value& nomenclature((*parsedSettings)["FileChecker configs"]["Nomenclature"]["Nomenclature"]);
+				const Value& nomenclature(parsedSettings["FileChecker configs"]["Nomenclature"]["Nomenclature"]);
 				for (Value::ConstValueIterator vit = nomenclature.Begin(); vit != nomenclature.End(); ++vit)
 					m_nomenclatureConfig.nomenclature.push_back(vit->GetString());
 			}
-			if ((*parsedSettings)["FileChecker configs"]["Nomenclature"].HasMember("Separator"))
+			if (parsedSettings["FileChecker configs"]["Nomenclature"].HasMember("Separator"))
 			{
-				const Value& separator((*parsedSettings)["FileChecker configs"]["Nomenclature"]["Separator"]);
+				const Value& separator(parsedSettings["FileChecker configs"]["Nomenclature"]["Separator"]);
 				m_nomenclatureConfig.separator = separator.GetString()[0];
 			}
-			if ((*parsedSettings)["FileChecker configs"]["Nomenclature"].HasMember("Definitions"))
+			if (parsedSettings["FileChecker configs"]["Nomenclature"].HasMember("Definitions"))
 			{
-				const Value& definitions((*parsedSettings)["FileChecker configs"]["Nomenclature"]["Definitions"]);
+				const Value& definitions(parsedSettings["FileChecker configs"]["Nomenclature"]["Definitions"]);
 				if (definitions.IsObject())
 				{
 					for (Value::ConstMemberIterator mit = definitions.GetObject().MemberBegin(); mit != definitions.GetObject().MemberEnd();
@@ -66,45 +60,42 @@ void Settings::LoadSettings(const std::string& filePath)
 				}
 			}
 		}
-		if ((*parsedSettings)["FileChecker configs"].HasMember("FileValidation"))
+		if (parsedSettings["FileChecker configs"].HasMember("ArborescenceConfig"))
 		{
-			if ((*parsedSettings)["FileChecker configs"]["FileValidation"].HasMember("CheckByNomenclature"))
+			if (parsedSettings["FileChecker configs"]["ArborescenceConfig"].HasMember("CheckByNomenclature"))
 			{
-				const Value& nomenclatureCheck((*parsedSettings)["FileChecker configs"]["FileValidation"]["CheckByNomenclature"]);
+				const Value& nomenclatureCheck(parsedSettings["FileChecker configs"]["ArborescenceConfig"]["CheckByNomenclature"]);
 				m_fileValidationConfig.checkByNomenclature = nomenclatureCheck.GetBool();
 			}
-			if ((*parsedSettings)["FileChecker configs"]["FileValidation"].HasMember("CheckByExtension"))
+			if (parsedSettings["FileChecker configs"]["ArborescenceConfig"].HasMember("CheckByExtension"))
 			{
-				const Value& extensionCheck((*parsedSettings)["FileChecker configs"]["FileValidation"]["CheckByExtension"]);
+				const Value& extensionCheck(parsedSettings["FileChecker configs"]["ArborescenceConfig"]["CheckByExtension"]);
 				m_fileValidationConfig.checkByExtension = extensionCheck.GetBool();
 			}
 		}
-		if ((*parsedSettings)["FileChecker configs"].HasMember("MoveDirectory"))
+		if (parsedSettings["FileChecker configs"].HasMember("MoveDirectory"))
 		{
-			if ((*parsedSettings)["FileChecker configs"]["MoveDirectory"].HasMember("Path"))
+			if (parsedSettings["FileChecker configs"]["MoveDirectory"].HasMember("Path"))
 			{
-				const Value& moveDirectoryPath((*parsedSettings)["FileChecker configs"]["MoveDirectory"]["Path"]);
+				const Value& moveDirectoryPath(parsedSettings["FileChecker configs"]["MoveDirectory"]["Path"]);
 				m_moveDirectoryPath = moveDirectoryPath.GetString();
 			}
 		}
 	}
 
-	if (parsedSettings->HasMember("Arborescence"))
+	if (parsedSettings.HasMember("Arborescence"))
 	{
-		if ((*parsedSettings)["Arborescence"].HasMember("StartPath"))
-			m_arborescenceStartPath = (*parsedSettings)["Arborescence"]["StartPath"].GetString();
+		if (parsedSettings["Arborescence"].HasMember("StartPath"))
+			m_arborescenceStartPath = parsedSettings["Arborescence"]["StartPath"].GetString();
 
-		if ((*parsedSettings)["Arborescence"].HasMember("Directories"))
+		if (parsedSettings["Arborescence"].HasMember("Directories"))
 		{
-			const Value& directories = (*parsedSettings)["Arborescence"]["Directories"];
+			const Value& directories = parsedSettings["Arborescence"]["Directories"];
 
 			for (Value::ConstValueIterator it = directories.Begin(); it != directories.End(); ++it)
 				m_directoriesArborescence.push_back(CreateDirectoryConfig((*it)));
 		}
 	}
-
-	delete parsedSettings;
-	parsedSettings = nullptr;
 }
 
 Settings::DirectoryConfig Settings::CreateDirectoryConfig(const Value& value)

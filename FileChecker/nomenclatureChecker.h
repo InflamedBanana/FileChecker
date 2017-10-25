@@ -17,20 +17,22 @@ public:
 	NomenclatureChecker();
 	~NomenclatureChecker();
 
-	static bool Start( Settings* settings);
+	static bool Start(Settings& settings);
 	static void Stop();
 	static NomenclatureChecker* GetInstance() { return s_nomenclatureChkr; }
 
 	APP_Status GetStatus() { return m_status; }
 
 private:
-	void Run(Settings* settings);
-	/*bool CheckPrefix(const std::string &fileName);
-	bool ChangePrefix(fs::path &file);*/
+	void Run(Settings& settings);
+	
+	void CheckDirectory(fs::path path,Settings::DirectoryConfig& directory, Settings& settings);
+	bool CompareNomenclature(const fs::path &file, Settings &settings);
+	std::vector<std::string> SplitFileName(const fs::path &file, Settings &settings);
 
 	APP_Status m_status;
-	//std::string prefix = PREFIXCHKR_PREFIX;//Change variables with config file
-	//bool doChangePrefix = true;//Change variables with config file
+	int m_nbOfFilesChecked;
+	int m_nbOfWrongFiles;
 };
 
 #endif

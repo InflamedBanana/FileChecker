@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.h" />
-    <ClInclude Include="extensionChecker.h" />
     <ClInclude Include="fileManipulator.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="settings.h" />

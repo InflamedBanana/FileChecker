@@ -50,6 +50,7 @@ namespace FileManipulator
 
 		return MoveFile(filePath, fs::path(filePath).replace_filename(newFileName) );
 	}
+
 	bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
 	{
 		error_code error;

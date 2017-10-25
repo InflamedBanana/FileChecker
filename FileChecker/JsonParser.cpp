@@ -27,7 +27,7 @@ void JSON_Parser::GenerateConfigFile(const string& filePath)
 		"			}\n"
 		"		},\n"
 		"\n"
-		"		\"FileValidation\":\n"
+		"		\"ArborescenceConfig\":\n"
 		"		{\n"
 		"			\"CheckByNomenclature\": true,\n"
 		"			\"CheckByExtension\":true\n"
@@ -82,7 +82,7 @@ bool JSON_Parser::ConfigFileExists(const string& filePath)
 	return std::experimental::filesystem::exists(configFilePath);
 }
 
-const Document* JSON_Parser::ParseFile(const std::string &filePath)
+Document JSON_Parser::ParseFile(const std::string &filePath)
 {
 	if ( !ConfigFileExists( filePath ) ) // in case it's been deleted during
 		GenerateConfigFile( filePath );
@@ -99,9 +99,7 @@ const Document* JSON_Parser::ParseFile(const std::string &filePath)
 			json.append(temp);
 	}
 	
-	Document* doc = new Document();
-	//Use stream later
-	//doc->ParseStream(file);
-	doc->Parse(json.c_str());
+	Document doc;
+	doc.Parse(json.c_str());
 	return doc;
 }
