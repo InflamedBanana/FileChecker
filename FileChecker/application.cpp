@@ -31,21 +31,20 @@ void Application::Menu()
 
 	m_menuChoice = Application::ChooseAction();
 	
-	cout << "You chose : " << ((int)m_menuChoice +1 ) << endl;
 	switch (m_menuChoice)
 	{
-
 	case MenuItem::MENU_QUIT: Quit();
 		break;
 	case MenuItem::MENU_NOMENCLATURE_CHECKER:
-		if (!NomenclatureChecker::Start(m_settings))
-			cout << "Couldn't Run Prefix Checker..." << endl << endl;
+		NomenclatureChecker::Start(m_settings);
+		Menu(); break;
+	case MenuItem::MENU_ARBORESCENCE_CHECKER:
 		Menu(); break;
 	case MenuItem::MENU_SETTINGS:
-		ShowSettings();
-	case MenuItem::MENU_EXTENSION_CHECKER:
+		ShowSettings(); Menu(); break;
 	case MenuItem::MENU_RUN_ALL:
 	default :
+		cout << "Didn't find menu entry." << endl;
 		Menu();
 		break;
 	}
@@ -69,7 +68,7 @@ Application::MenuItem Application::ChooseAction()
 		switch (input)
 		{
 		case '1': return MenuItem::MENU_NOMENCLATURE_CHECKER;
-		case '2': return MenuItem::MENU_EXTENSION_CHECKER;
+		case '2': return MenuItem::MENU_ARBORESCENCE_CHECKER;
 		case '3': return MenuItem::MENU_RUN_ALL;
 		case '4': return MenuItem::MENU_SETTINGS;
 		case '5': return MenuItem::MENU_QUIT;

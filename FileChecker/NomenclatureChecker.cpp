@@ -14,15 +14,12 @@ NomenclatureChecker::~NomenclatureChecker() {}
 
 NomenclatureChecker* NomenclatureChecker::s_nomenclatureChkr = nullptr;
 
-bool NomenclatureChecker::Start( Settings& settings)
+void NomenclatureChecker::Start( Settings& settings)
 {
-	if (s_nomenclatureChkr == nullptr)
-	{
-		s_nomenclatureChkr = new NomenclatureChecker;
-		s_nomenclatureChkr->Run( settings );
-		return true;
-	}
-	return false;
+	if (s_nomenclatureChkr != nullptr) return;
+	
+	s_nomenclatureChkr = new NomenclatureChecker;
+	s_nomenclatureChkr->Run( settings );
 }
 
 void NomenclatureChecker::Stop()
@@ -47,7 +44,7 @@ void NomenclatureChecker::Run( Settings& settings)
 
 void NomenclatureChecker::CheckDirectory(fs::path path, Settings::DirectoryConfig& directory, Settings& settings)
 {
-	path / directory.name / "/";
+	path.append( directory.name ) / "/";
 
 	if (!directory.excludeFromNomenclatureCheck)
 	{
@@ -64,6 +61,8 @@ void NomenclatureChecker::CheckDirectory(fs::path path, Settings::DirectoryConfi
 		}
 	}
 
+	if (directory.excludeRecursiveChecks) return;
+
 	for (auto& subDirectory : directory.subDirectories)
 		CheckDirectory(path, subDirectory, settings);
 }
@@ -72,7 +71,7 @@ bool NomenclatureChecker::CompareNomenclature(const fs::path &file, Settings &se
 {
 	vector<string> fileName(SplitFileName(file, settings));
 
-	for (int i = 0; i < settings.GetNomenclatureConfig()->nomenclature.size(); ++i)
+	for (int i = 0; i < settings.GetNomenclatureConfig()->definitions.size(); ++i)
 	{
 		if (i >= fileName.size()) return false;
 		if (settings.GetNomenclatureConfig()->definitions[i].size() == 0) return true;

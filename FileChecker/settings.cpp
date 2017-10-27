@@ -32,12 +32,6 @@ void Settings::LoadSettings(const std::string& filePath)
 	{
 		if (parsedSettings["FileChecker configs"].HasMember("Nomenclature"))
 		{
-			if (parsedSettings["FileChecker configs"]["Nomenclature"].HasMember("Nomenclature"))
-			{
-				const Value& nomenclature(parsedSettings["FileChecker configs"]["Nomenclature"]["Nomenclature"]);
-				for (Value::ConstValueIterator vit = nomenclature.Begin(); vit != nomenclature.End(); ++vit)
-					m_nomenclatureConfig.nomenclature.push_back(vit->GetString());
-			}
 			if (parsedSettings["FileChecker configs"]["Nomenclature"].HasMember("Separator"))
 			{
 				const Value& separator(parsedSettings["FileChecker configs"]["Nomenclature"]["Separator"]);
@@ -56,6 +50,7 @@ void Settings::LoadSettings(const std::string& filePath)
 							defArray.push_back(vit->GetString());
 
 						m_nomenclatureConfig.definitions.push_back(defArray);
+						m_nomenclatureConfig.nomenclature.push_back(mit->name.GetString());
 					}
 				}
 			}
@@ -110,6 +105,8 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig(const Value& value)
 		newDir.excludeFromNomenclatureCheck = value["ExcludeFromNomenclatureCheck"].GetBool();
 	if (value.HasMember("ExcludeFromExtensionCheck"))
 		newDir.excludeFromExtensionCheck = value["ExcludeFromExtensionCheck"].GetBool();
+	if (value.HasMember("ExcludeRecursiveChecks"))
+		newDir.excludeRecursiveChecks = value["ExcludeRecursiveChecks"].GetBool();
 	if (value.HasMember("NomenclatureRestrict"))
 	{
 		for (Value::ConstValueIterator it = value["NomenclatureRestrict"].Begin(); it != value["NomenclatureRestrict"].End(); ++it)
@@ -128,21 +125,3 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig(const Value& value)
 
 	return newDir;
 }
-
-/*const DirectoryConfig* Settings::GetDirectoryConfig( const fs::path &directoryPath)
-{
-	for (vector<DirectoryConfig>::iterator it = m_directoriesConfigs.begin(); it != m_directoriesConfigs.end(); it++)
-		if (it->GetPath() == directoryPath)
-			return &(*it);
-
-	return nullptr;
-}*/
-
-// ---- DIRECTORY CONFIG -------
-
-/*DirectoryConfig::DirectoryConfig( const bool excludeFromPrefixChkr, const bool excludeFromExtChkr, const fs::path &dirPath, const vector<fs::path> &subDirectories)
-	:m_excludeFromPrefixChkr( excludeFromPrefixChkr ),m_excludeFromExtChkr( excludeFromExtChkr )
-	, m_directoryPath( dirPath ),m_subDirectories( subDirectories )
-{}
-
-DirectoryConfig::~DirectoryConfig() {};*/

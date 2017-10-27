@@ -25,6 +25,7 @@ public:
 		std::string name;
 		bool excludeFromNomenclatureCheck;
 		bool excludeFromExtensionCheck;
+		bool excludeRecursiveChecks;
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;

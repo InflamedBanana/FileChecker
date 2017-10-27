@@ -5,7 +5,6 @@
 
 #include<string>
 #include<rapidjson\document.h>
-#include<memory>
 
 namespace JSON_Parser
 {

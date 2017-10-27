@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="application.cpp" />
+    <ClCompile Include="arborescenceChecker.cpp" />
     <ClCompile Include="fileManipulator.cpp" />
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="main.cpp" />
@@ -120,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.h" />
+    <ClInclude Include="arborescenceChecker.h" />
     <ClInclude Include="fileManipulator.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="settings.h" />
