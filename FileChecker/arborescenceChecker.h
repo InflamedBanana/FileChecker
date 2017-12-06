@@ -5,6 +5,7 @@
 
 #include "settings.h"
 #include "Status.h"
+#include "fileManipulator.h"
 
 class ArborescenceChecker
 {
@@ -20,6 +21,11 @@ private:
 	~ArborescenceChecker();
 	void Run(Settings& settings);
 	
+	void CheckDirectory( fs::path _path, const Settings::DirectoryConfig& _directory, const Settings& _settings);
+	void CheckFilesExtensionInDirectory(const fs::path _directory, const std::vector<std::string>& _extensions, Settings& _settings);
+	bool CheckFileExtension(const fs::path _file, const std::vector<std::string>& _extensions);
+
+
 	APP_Status m_status;
 };
 

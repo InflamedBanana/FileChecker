@@ -4,8 +4,8 @@
 
 #include <string>
 #include "fileManipulator.h"
-#include "settings.h"
 #include "Status.h"
+#include "settings.h"
 
 class NomenclatureChecker
 {

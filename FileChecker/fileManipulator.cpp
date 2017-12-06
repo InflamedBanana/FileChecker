@@ -41,14 +41,14 @@ namespace FileManipulator
 		return files;
 	}
 
-	bool RenameFile(const fs::path &filePath, const string &newName, const bool &addExtension)
+	bool RenameFile(const fs::path &_filePath, const string &newName, const bool &addExtension)
 	{
 		std::string newFileName(newName);
 
 		if( addExtension )
-			newFileName.append( filePath.extension().string() );
+			newFileName.append( _filePath.extension().string() );
 
-		return MoveFile(filePath, fs::path(filePath).replace_filename(newFileName) );
+		return MoveFile(_filePath, fs::path(_filePath).replace_filename(newFileName) );
 	}
 
 	bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
@@ -58,4 +58,13 @@ namespace FileManipulator
 
 		return ( error.value() == 0 );
 	}
+
+	bool CreateDirectory(const fs::path& _dirPath)
+	{
+		error_code error;
+		fs::create_directories(_dirPath, error);
+
+		return error.value() == 0;
+	}
+	
 }

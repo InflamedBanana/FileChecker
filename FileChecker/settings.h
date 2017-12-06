@@ -25,7 +25,7 @@ public:
 		std::string name;
 		bool excludeFromNomenclatureCheck;
 		bool excludeFromExtensionCheck;
-		bool excludeRecursiveChecks;
+		bool excludeRecursiveChecks; // implement in json
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;

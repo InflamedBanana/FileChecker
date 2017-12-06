@@ -1,5 +1,6 @@
 #include "application.h"
 #include "nomenclatureChecker.h"
+#include "arborescenceChecker.h"
 #include <iostream>
 
 using namespace std;
@@ -39,7 +40,7 @@ void Application::Menu()
 		NomenclatureChecker::Start(m_settings);
 		Menu(); break;
 	case MenuItem::MENU_ARBORESCENCE_CHECKER:
-		Menu(); break;
+		ArborescenceChecker::Start(m_settings); Menu(); break;
 	case MenuItem::MENU_SETTINGS:
 		ShowSettings(); Menu(); break;
 	case MenuItem::MENU_RUN_ALL:

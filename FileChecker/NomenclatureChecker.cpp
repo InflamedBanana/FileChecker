@@ -1,9 +1,10 @@
 #include <iostream>
-#include <string>
+//#include <string>
 #include <sstream>
 #include "nomenclatureChecker.h"
 #include "fileManipulator.h"
 #include <vector>
+#include "UString.h"
 
 using namespace std;
 
@@ -69,7 +70,9 @@ void NomenclatureChecker::CheckDirectory(fs::path path, Settings::DirectoryConfi
 
 bool NomenclatureChecker::CompareNomenclature(const fs::path &file, Settings &settings)
 {
-	vector<string> fileName(SplitFileName(file, settings));
+	//vector<string> fileName(SplitFileName(file, settings));
+	vector<string> fileName(uString::Split(file.filename().string(),settings.GetNomenclatureConfig()->separator));
+
 
 	for (int i = 0; i < settings.GetNomenclatureConfig()->definitions.size(); ++i)
 	{
@@ -86,14 +89,14 @@ bool NomenclatureChecker::CompareNomenclature(const fs::path &file, Settings &se
 	return true;
 }
 
-vector<string> NomenclatureChecker::SplitFileName(const fs::path &file, Settings &settings)
-{
-	vector<string> fileNameParts;
-	istringstream iss(file.filename().string());
-	string temp;
-
-	while (getline(iss, temp, settings.GetNomenclatureConfig()->separator))
-		fileNameParts.push_back(temp);
-
-	return fileNameParts;
-}
+//vector<string> NomenclatureChecker::SplitFileName(const fs::path &file, Settings &settings)
+//{
+//	vector<string> fileNameParts;
+//	istringstream iss(file.filename().string());
+//	string temp;
+//
+//	while (getline(iss, temp, settings.GetNomenclatureConfig()->separator))
+//		fileNameParts.push_back(temp);
+//
+//	return fileNameParts;
+//}
