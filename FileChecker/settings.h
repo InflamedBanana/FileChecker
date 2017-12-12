@@ -25,7 +25,7 @@ public:
 		std::string name;
 		bool excludeFromNomenclatureCheck;
 		bool excludeFromExtensionCheck;
-		bool excludeRecursiveChecks; // implement in json
+		bool excludeRecursiveChecks; // TODO implement in json
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;
@@ -45,9 +45,8 @@ public:
 
 	NomenclatureConfig* GetNomenclatureConfig() { return &m_nomenclatureConfig; } // ask if type* function() or type function().
 	FileValidationConfig* GetFileValidationConfig() { return &m_fileValidationConfig; }
-	std::string GetMoveDirectoryPath() { return m_moveDirectoryPath; }
-	std::string GetArborescenceStartPath() { return m_arborescenceStartPath; }
-	std::vector<DirectoryConfig>* GetDirectoryArborescence() { return &m_directoriesArborescence; };
+	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
+	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
 
 private:
 	void LoadSettings(const std::string& filePath);

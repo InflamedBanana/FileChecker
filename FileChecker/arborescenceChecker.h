@@ -21,8 +21,8 @@ private:
 	~ArborescenceChecker();
 	void Run(Settings& settings);
 	
-	void CheckDirectory( fs::path _path, const Settings::DirectoryConfig& _directory, const Settings& _settings);
-	void CheckFilesExtensionInDirectory(const fs::path _directory, const std::vector<std::string>& _extensions, Settings& _settings);
+	void CheckDirectory( std::string _path, const Settings::DirectoryConfig& _directory, const Settings& _settings);
+	void CheckFilesExtensionInDirectory(const std::string _directory, const std::vector<std::string>& _extensions, const Settings& _settings);
 	bool CheckFileExtension(const fs::path _file, const std::vector<std::string>& _extensions);
 
 

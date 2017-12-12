@@ -120,8 +120,8 @@ void Application::ShowSettings()
 
 	cout << "Move Directory Path : " << m_settings.GetMoveDirectoryPath() << endl;
 	cout << endl << "Arborescence Start Path : " << m_settings.GetArborescenceStartPath() << endl;
-	cout << "nb of directories " << m_settings.GetDirectoryArborescence()->size() << endl;
-	for (vector<Settings::DirectoryConfig>::iterator it = m_settings.GetDirectoryArborescence()->begin();
-		it != m_settings.GetDirectoryArborescence()->end(); ++it)
+	cout << "nb of directories " << m_settings.GetDirectoriesArborescence()->size() << endl;
+	for (vector<Settings::DirectoryConfig>::iterator it = m_settings.GetDirectoriesArborescence()->begin();
+		it != m_settings.GetDirectoriesArborescence()->end(); ++it)
 		cout << "Directory : " << it->name << endl;
 }

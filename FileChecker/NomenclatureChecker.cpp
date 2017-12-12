@@ -8,17 +8,17 @@
 
 using namespace std;
 
-NomenclatureChecker::NomenclatureChecker() : m_status(APP_Status::S_STARTED), m_nbOfFilesChecked(0),
-											m_nbOfWrongFiles(0){}
+NomenclatureChecker::NomenclatureChecker() : m_status( APP_Status::S_STARTED ), m_nbOfFilesChecked( 0 ),
+m_nbOfWrongFiles( 0 ) {}
 
 NomenclatureChecker::~NomenclatureChecker() {}
 
 NomenclatureChecker* NomenclatureChecker::s_nomenclatureChkr = nullptr;
 
-void NomenclatureChecker::Start( Settings& settings)
+void NomenclatureChecker::Start( Settings& settings )
 {
-	if (s_nomenclatureChkr != nullptr) return;
-	
+	if( s_nomenclatureChkr != nullptr ) return;
+
 	s_nomenclatureChkr = new NomenclatureChecker;
 	s_nomenclatureChkr->Run( settings );
 }
@@ -30,12 +30,12 @@ void NomenclatureChecker::Stop()
 	s_nomenclatureChkr = nullptr;
 }
 
-void NomenclatureChecker::Run( Settings& settings)
+void NomenclatureChecker::Run( Settings& settings )
 {
 	m_status = APP_Status::S_RUNNING;
-	
-	for (auto& directory : *(settings.GetDirectoriesArborescence())) //every root directories
-		CheckDirectory(settings.GetArborescenceStartPath(), directory, settings);
+
+	for( auto& directory : *( settings.GetDirectoriesArborescence() ) ) //every root directories
+		CheckDirectory( settings.GetArborescenceStartPath(), directory, settings );
 
 	cout << endl << "Number of files checked : " << m_nbOfFilesChecked << '.' << endl;
 	cout << "Number of wrong files : " << m_nbOfWrongFiles << '.' << endl;
@@ -43,60 +43,48 @@ void NomenclatureChecker::Run( Settings& settings)
 	Stop();
 }
 
-void NomenclatureChecker::CheckDirectory(fs::path path, Settings::DirectoryConfig& directory, Settings& settings)
+void NomenclatureChecker::CheckDirectory( fs::path _path, Settings::DirectoryConfig& _directory, Settings& _settings )
 {
-	path.append( directory.name ) / "/";
+	_path.append( _directory.name ) / "/";
 
-	if (!directory.excludeFromNomenclatureCheck)
+	if( !_directory.excludeFromNomenclatureCheck )
 	{
-		for (auto& file : FileManipulator::GetFilesInDirectory(path.string()))
+		for( auto& file : FileManipulator::GetFilesInDirectory( _path.string() ) )
 		{
-			if (!CompareNomenclature(file, settings))
+			if( !CompareNomenclature( file, _settings ) )
 			{
-				FileManipulator::MoveFile(file, fs::path(settings.GetMoveDirectoryPath()) / file.filename());
+				FileManipulator::MoveFile( file, _settings.GetMoveDirectoryPath() );
 				++m_nbOfWrongFiles;
 			}
-			
-			cout << file.string() << endl;
+
+			cout << file << endl;
 			++m_nbOfFilesChecked;
 		}
 	}
 
-	if (directory.excludeRecursiveChecks) return;
+	if( _directory.excludeRecursiveChecks ) return;
 
-	for (auto& subDirectory : directory.subDirectories)
-		CheckDirectory(path, subDirectory, settings);
+	for( auto& subDirectory : _directory.subDirectories )
+		CheckDirectory( _path, subDirectory, _settings );
 }
 
-bool NomenclatureChecker::CompareNomenclature(const fs::path &file, Settings &settings)
+bool NomenclatureChecker::CompareNomenclature( const fs::path &file, Settings &settings )
 {
 	//vector<string> fileName(SplitFileName(file, settings));
-	vector<string> fileName(uString::Split(file.filename().string(),settings.GetNomenclatureConfig()->separator));
+	vector<string> fileName( uString::Split( file.filename().string(), settings.GetNomenclatureConfig()->separator ) );
 
 
-	for (int i = 0; i < settings.GetNomenclatureConfig()->definitions.size(); ++i)
+	for( int i = 0; i < settings.GetNomenclatureConfig()->definitions.size(); ++i )
 	{
-		if (i >= fileName.size()) return false;
-		if (settings.GetNomenclatureConfig()->definitions[i].size() == 0) return true;
+		if( i >= fileName.size() ) return false;
+		if( settings.GetNomenclatureConfig()->definitions[ i ].size() == 0 ) return true;
 
-		bool isBadlyNamed(true);
+		bool isBadlyNamed( true );
 
-		for (const auto& nDef : settings.GetNomenclatureConfig()->definitions[i])
-			if (fileName[i].compare(nDef) == 0) isBadlyNamed = false;
+		for( const auto& nDef : settings.GetNomenclatureConfig()->definitions[ i ] )
+			if( fileName[ i ].compare( nDef ) == 0 ) isBadlyNamed = false;
 
-		if (isBadlyNamed) return false;
+		if( isBadlyNamed ) return false;
 	}
 	return true;
 }
-
-//vector<string> NomenclatureChecker::SplitFileName(const fs::path &file, Settings &settings)
-//{
-//	vector<string> fileNameParts;
-//	istringstream iss(file.filename().string());
-//	string temp;
-//
-//	while (getline(iss, temp, settings.GetNomenclatureConfig()->separator))
-//		fileNameParts.push_back(temp);
-//
-//	return fileNameParts;
-//}

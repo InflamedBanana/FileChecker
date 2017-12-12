@@ -1,47 +1,74 @@
 #include "fileManipulator.h"
+#include <algorithm>
 
 namespace FileManipulator
 {
 	using namespace std;
 
-	set<fs::path> GetFilesInDirectory(const string &directory)
+	vector<std::string> GetFilesInDirectory( const string &directory )
 	{
-		set<fs::path> files;
+		vector<std::string> files;
 
-		for (const auto& file : fs::directory_iterator(directory))
-			if (fs::is_regular_file(file))
-				files.insert(file);
+		for( const auto& file : fs::directory_iterator( directory ) )
+			if( fs::is_regular_file( file ) )
+				files.push_back( file.path().string() );
 
 		return files;
 	}
 
-	set<fs::path> GetDirectoriesAtPath(const string &directory)
+	vector<std::string> GetDirectoriesAtPath( const string &directory )
 	{
-		set<fs::path> files;
+		vector<std::string> files;
 
-		for (const auto& file : fs::directory_iterator(directory))
-			if ( fs::is_directory(file) )
-				files.insert(file);
-
-		return files;
-	}
-
-	set<fs::path> GetAllFilesInRecursiveDirectory(const string &directory, const std::set<fs::path> *exceptions)
-	{
-		set<fs::path> files;
-
-		for ( auto& file : fs::recursive_directory_iterator(directory))
+		for( const auto& file : fs::directory_iterator( directory ) )
 		{
-			if ( exceptions != nullptr && exceptions->find(file) != exceptions->end() )
-				continue;
-			else if ( fs::is_regular_file(file) )
-				files.insert(file);
+			if( fs::is_directory( file ) )
+			{
+				std::string str( file.path().string() );
+				replace( str.begin(), str.end(), '\\', '/' );
+				files.push_back( str );
+			}
 		}
 
 		return files;
 	}
 
-	bool RenameFile(const fs::path &_filePath, const string &newName, const bool &addExtension)
+	std::string GetDirectoryAtPath( const string& _directoryPath, const string& _directoryName )
+	{
+		for( const auto& file : fs::directory_iterator( _directoryPath ) )
+			if( fs::is_directory( file ) && file.path().filename().compare( _directoryName ) == 0 )
+				return file.path().string();
+		
+		return "";
+	}
+
+	set<fs::path> GetAllFilesInRecursiveDirectory( const string &directory, const std::set<fs::path> *exceptions )
+	{
+		set<fs::path> files;
+
+		for( auto& file : fs::recursive_directory_iterator( directory ) )
+		{
+			if( exceptions != nullptr && exceptions->find( file ) != exceptions->end() )
+				continue;
+			else if( fs::is_regular_file( file ) )
+				files.insert( file );
+		}
+
+		return files;
+	}
+
+	bool DirectoryContainsFile( const std::string& _directoryPath, const std::string& _fileName )
+	{
+		fs::path directory( _directoryPath ), fileToFind(_fileName);
+
+		for( auto& file : fs::directory_iterator( directory ) )
+			if( file.path() == fileToFind )
+				return true;
+
+		return false;
+	}
+
+	/*bool RenameFile(const fs::path &_filePath, const string &newName, const bool &addExtension)
 	{
 		std::string newFileName(newName);
 
@@ -49,22 +76,43 @@ namespace FileManipulator
 			newFileName.append( _filePath.extension().string() );
 
 		return MoveFile(_filePath, fs::path(_filePath).replace_filename(newFileName) );
+	}*/
+
+	bool RenameFile( const std::string &_filePath, const string &newName )
+	{
+		fs::path filePath( _filePath );
+		fs::path newFilePath( _filePath );
+		newFilePath.replace_filename( newName );
+
+		error_code error;
+
+		fs::rename( filePath, newFilePath, error );
+		return error.value() == 0;
 	}
 
-	bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
+	//bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
+	//{
+	//	error_code error;
+	//	fs::rename(filePath, destinationPath, error);
+
+	//	return ( error.value() == 0 );
+	//}
+
+	bool MoveFile( const std::string &_filePath, const std::string &_destinationPath )
 	{
 		error_code error;
-		fs::rename(filePath, destinationPath, error);
+		fs::path file( _filePath ), destination( _destinationPath );
 
-		return ( error.value() == 0 );
+		//fs::rename( filePath, destinationPath, error );
+		fs::rename( file, destination / file.filename(), error );
+		return error.value() == 0;
 	}
 
-	bool CreateDirectory(const fs::path& _dirPath)
+	bool CreateDirectory( const std::string& _dirPath )
 	{
 		error_code error;
-		fs::create_directories(_dirPath, error);
+		fs::create_directories( _dirPath, error );
 
 		return error.value() == 0;
 	}
-	
 }
