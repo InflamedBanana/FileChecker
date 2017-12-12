@@ -25,7 +25,7 @@ public:
 		std::string name;
 		bool excludeFromNomenclatureCheck;
 		bool excludeFromExtensionCheck;
-		bool excludeRecursiveChecks; // TODO implement in json
+		bool excludeRecursiveChecks;
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;
@@ -41,10 +41,10 @@ public:
 	Settings(const std::string& filePath);
 	~Settings();
 
-	std::vector<DirectoryConfig>* GetDirectoriesArborescence() { return &m_directoriesArborescence; }
+	std::vector<DirectoryConfig> GetDirectoriesArborescence() const { return m_directoriesArborescence; }
 
-	NomenclatureConfig* GetNomenclatureConfig() { return &m_nomenclatureConfig; } // ask if type* function() or type function().
-	FileValidationConfig* GetFileValidationConfig() { return &m_fileValidationConfig; }
+	NomenclatureConfig GetNomenclatureConfig() const { return m_nomenclatureConfig; }
+	FileValidationConfig GetFileValidationConfig() { return m_fileValidationConfig; }
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
 

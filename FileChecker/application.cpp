@@ -92,11 +92,11 @@ void Application::ShowSettings()
 
 	string nomenclature;
 
-	for (vector<string>::iterator itr = m_settings.GetNomenclatureConfig()->nomenclature.begin();
-		itr != m_settings.GetNomenclatureConfig()->nomenclature.end(); ++itr)
+	for (vector<string>::iterator itr = m_settings.GetNomenclatureConfig().nomenclature.begin();
+		itr != m_settings.GetNomenclatureConfig().nomenclature.end(); ++itr)
 	{
 		nomenclature.append((*itr).begin(), (*itr).end());
-		nomenclature.push_back(m_settings.GetNomenclatureConfig()->separator);
+		nomenclature.push_back(m_settings.GetNomenclatureConfig().separator);
 	}
 
 	cout << "Nomenclature : " << nomenclature << endl;
@@ -104,8 +104,8 @@ void Application::ShowSettings()
 	{
 		int i(1);
 
-		for (vector<vector<string>>::iterator itr = m_settings.GetNomenclatureConfig()->definitions.begin();
-			itr != m_settings.GetNomenclatureConfig()->definitions.end(); ++itr)
+		for (vector<vector<string>>::iterator itr = m_settings.GetNomenclatureConfig().definitions.begin();
+			itr != m_settings.GetNomenclatureConfig().definitions.end(); ++itr)
 		{
 			cout << "Definition " << i << " : " ;
 			for (vector<string>::iterator sitr = itr->begin(); sitr != itr->end(); ++sitr)
@@ -115,13 +115,13 @@ void Application::ShowSettings()
 		}
 	}
 
-	cout << endl << "Check by nomenclature : " << m_settings.GetFileValidationConfig()->checkByNomenclature << endl;
-	cout << "Check by extension : " << m_settings.GetFileValidationConfig()->checkByExtension << endl;
+	cout << endl << "Check by nomenclature : " << m_settings.GetFileValidationConfig().checkByNomenclature << endl;
+	cout << "Check by extension : " << m_settings.GetFileValidationConfig().checkByExtension << endl;
 
 	cout << "Move Directory Path : " << m_settings.GetMoveDirectoryPath() << endl;
 	cout << endl << "Arborescence Start Path : " << m_settings.GetArborescenceStartPath() << endl;
-	cout << "nb of directories " << m_settings.GetDirectoriesArborescence()->size() << endl;
-	for (vector<Settings::DirectoryConfig>::iterator it = m_settings.GetDirectoriesArborescence()->begin();
-		it != m_settings.GetDirectoriesArborescence()->end(); ++it)
+	cout << "nb of directories " << m_settings.GetDirectoriesArborescence().size() << endl;
+	for (vector<Settings::DirectoryConfig>::iterator it = m_settings.GetDirectoriesArborescence().begin();
+		it != m_settings.GetDirectoriesArborescence().end(); ++it)
 		cout << "Directory : " << it->name << endl;
 }

@@ -38,8 +38,8 @@ private:
 	MenuItem ChooseAction();
 	void ShowSettings();
 
-	Settings m_settings;
-	MenuItem m_menuChoice;
+	Settings   m_settings;
+	MenuItem   m_menuChoice;
 	APP_Status m_status;
 };
 

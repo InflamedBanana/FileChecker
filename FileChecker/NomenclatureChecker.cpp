@@ -34,7 +34,7 @@ void NomenclatureChecker::Run( Settings& settings )
 {
 	m_status = APP_Status::S_RUNNING;
 
-	for( auto& directory : *( settings.GetDirectoriesArborescence() ) ) //every root directories
+	for( auto& directory :  settings.GetDirectoriesArborescence() ) //every root directories
 		CheckDirectory( settings.GetArborescenceStartPath(), directory, settings );
 
 	cout << endl << "Number of files checked : " << m_nbOfFilesChecked << '.' << endl;
@@ -71,17 +71,17 @@ void NomenclatureChecker::CheckDirectory( fs::path _path, Settings::DirectoryCon
 bool NomenclatureChecker::CompareNomenclature( const fs::path &file, Settings &settings )
 {
 	//vector<string> fileName(SplitFileName(file, settings));
-	vector<string> fileName( uString::Split( file.filename().string(), settings.GetNomenclatureConfig()->separator ) );
+	vector<string> fileName( uString::split( file.filename().string(), settings.GetNomenclatureConfig().separator ) );
 
 
-	for( int i = 0; i < settings.GetNomenclatureConfig()->definitions.size(); ++i )
+	for( int i = 0; i < settings.GetNomenclatureConfig().definitions.size(); ++i )
 	{
 		if( i >= fileName.size() ) return false;
-		if( settings.GetNomenclatureConfig()->definitions[ i ].size() == 0 ) return true;
+		if( settings.GetNomenclatureConfig().definitions[ i ].size() == 0 ) return true;
 
 		bool isBadlyNamed( true );
 
-		for( const auto& nDef : settings.GetNomenclatureConfig()->definitions[ i ] )
+		for( const auto& nDef : settings.GetNomenclatureConfig().definitions[ i ] )
 			if( fileName[ i ].compare( nDef ) == 0 ) isBadlyNamed = false;
 
 		if( isBadlyNamed ) return false;
