@@ -8,25 +8,13 @@
 
 namespace Utility_String
 {
-	//std::vector<std::string> Split(const std::string& _str, const char& _separator)
-	//{
-	//	std::vector<std::string> fileNameParts;
-	//	std::istringstream iss(_str);
-	//	std::string temp;
-
-	//	while (std::getline(iss, temp, _separator))
-	//		fileNameParts.push_back(temp);
-
-	//	return fileNameParts;
-	//}
-
 	template<typename Out>
 	void split(const std::string& _str, const char& _delimiter, Out _splitted)
 	{
 		std::istringstream iss(_str);
 		std::string split;
 
-		while (std::getline(iss, split, _separator))
+		while (std::getline(iss, split, _delimiter ))
 			if(!split.empty())
 				*(_splitted++) = split;
 	}
