@@ -30,7 +30,6 @@ public:
 
 		std::string name;
 		int flags;
-		//std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;
 	};
@@ -45,11 +44,10 @@ public:
 	Settings( const std::string& filePath );
 	~Settings();
 
-	std::vector<DirectoryConfig> GetDirectoriesArborescence() const { return m_directoriesArborescence; }
+	DirectoryConfig GetArborescenceRootDirectory() const { return m_arborescenceRootDirectory; }
 
 	NomenclatureConfig GetNomenclatureConfig() const { return m_nomenclatureConfig; }
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
-	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
 	std::vector<std::string> GetAssociatedFiles() const { return m_associatedFiles; }
 
 private:
@@ -57,8 +55,7 @@ private:
 	DirectoryConfig CreateDirectoryConfig( const rapidjson::Value& value );
 	//void SaveSetting(const std::string& filePath); when there is an interface
 
-	std::vector<DirectoryConfig> m_directoriesArborescence;
-	std::string m_arborescenceStartPath;
+	DirectoryConfig m_arborescenceRootDirectory;
 	NomenclatureConfig m_nomenclatureConfig;
 	std::string m_moveDirectoryPath;
 	std::vector<std::string> m_associatedFiles;

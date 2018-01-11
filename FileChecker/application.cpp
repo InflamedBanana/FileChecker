@@ -90,7 +90,6 @@ void Application::ShowSettings()
 	string nomenclature;
 
 	Settings::NomenclatureConfig nomenclatureSettings( m_settings.GetNomenclatureConfig() );
-	vector<Settings::DirectoryConfig> directoriesArborescence( m_settings.GetDirectoriesArborescence() );
 
 	for( vector<string>::iterator itr = nomenclatureSettings.nomenclature.begin();
 		 itr != nomenclatureSettings.nomenclature.end(); ++itr )
@@ -116,12 +115,6 @@ void Application::ShowSettings()
 	}
 
 	cout << "Move Directory Path : " << m_settings.GetMoveDirectoryPath() << endl;
-	cout << endl << "Arborescence Start Path : " << m_settings.GetArborescenceStartPath() << endl;
-	cout << "nb of directories " << m_settings.GetDirectoriesArborescence().size() << endl;
-
-	for( vector<Settings::DirectoryConfig>::iterator it = directoriesArborescence.begin();
-		 it != directoriesArborescence.end(); ++it )
-		cout << "Directory : " << it->name << endl;
 }
 
 void Application::NavigateThroughDirectories()
@@ -130,13 +123,8 @@ void Application::NavigateThroughDirectories()
 
 	unordered_set<string> badFiles;
 
-	for( const auto& directory : m_settings.GetDirectoriesArborescence() )
-	{
-		if( directory.name == "Bin" || directory.name == "FileChecker" ) // replace by DirectoryConfig of StartPath
-			continue;
-
-		CheckDirectory( m_settings.GetArborescenceStartPath(), directory, badFiles );
-	}
+	string startPath( "" );
+	CheckDirectory( startPath, m_settings.GetArborescenceRootDirectory(), badFiles );
 
 	SendToBin( badFiles );
 	LogFilesSent( badFiles );
@@ -144,8 +132,11 @@ void Application::NavigateThroughDirectories()
 
 void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
 {
-	_path.append( _directory.name + "/" );
+	if( _directory.name == "Bin" || _directory.name == "FileChecker" ) // replace by DirectoryConfig of StartPath
+		return;
 
+	_path.append( _directory.name + "/" );
+	
 	Arborescence::CheckArborescence( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Nomenclature_Check ) == 0 )
 		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles, m_settings.GetAssociatedFiles() );

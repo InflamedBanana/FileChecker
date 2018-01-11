@@ -74,15 +74,15 @@ bool Settings::LoadSettings( const std::string& filePath )
 
 	if( parsedSettings.HasMember( "Arborescence" ) )
 	{
-		if( parsedSettings[ "Arborescence" ].HasMember( "StartPath" ) )
-			m_arborescenceStartPath = parsedSettings[ "Arborescence" ][ "StartPath" ].GetString();
-
 		if( parsedSettings[ "Arborescence" ].HasMember( "Directories" ) )
 		{
 			const Value& directories = parsedSettings[ "Arborescence" ][ "Directories" ];
 
-			for( Value::ConstValueIterator it = directories.Begin(); it != directories.End(); ++it )
-				m_directoriesArborescence.push_back( CreateDirectoryConfig( ( *it ) ) );
+			for( Value::ConstValueIterator it = directories.Begin(); it != directories.End(); ++it ) //FIXME that's bad, transform "Directories into object instead
+			{
+				//m_directoriesArborescence.push_back( CreateDirectoryConfig( ( *it ) ) );
+				m_arborescenceRootDirectory = CreateDirectoryConfig( ( *it ) );
+			}
 		}
 	}
 
