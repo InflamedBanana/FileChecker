@@ -6,6 +6,7 @@
 typedef enum 
 {
 	S_STARTED,
+	S_MENU,
 	S_RUNNING,
 	S_STOPPED,
 	S_ERROR

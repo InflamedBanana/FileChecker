@@ -5,6 +5,7 @@
 #include "Status.h"
 #include "settings.h"
 #define CONFIG_FILE_PATH "./CheckerConfig.json"
+#define APPLICATION_PATH "../FileChecker"
 
 class Application
 {
@@ -26,8 +27,8 @@ private:
 	enum MenuItem
 	{
 		MENU_NULL,
-		MENU_NOMENCLATURE_CHECKER,
-		MENU_ARBORESCENCE_CHECKER,
+		/*	MENU_NOMENCLATURE_CHECKER,
+			MENU_ARBORESCENCE_CHECKER,*/
 		MENU_SETTINGS,
 		MENU_RUN_ALL,
 		MENU_QUIT,
@@ -37,6 +38,11 @@ private:
 	void Menu();
 	MenuItem ChooseAction();
 	void ShowSettings();
+
+	void NavigateThroughDirectories();
+	void CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::vector<std::string>& _badFiles );
+	void SendToBin( const std::vector<std::string>& _file );
+	void LogFilesSent( const std::vector<std::string>& _files );
 
 	Settings   m_settings;
 	MenuItem   m_menuChoice;

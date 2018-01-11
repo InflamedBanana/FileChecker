@@ -1,0 +1,105 @@
+{
+	"FileChecker configs":
+	{
+		"Nomenclature":
+		{
+			"Separator" : "_",
+			"Definitions":
+			{
+				"Prefix": ["Test"],
+				"Type" : ["Mat"],
+				"Name" : [""]
+			}
+		},
+
+		"ArborescenceConfig":
+		{
+			"CheckByNomenclature": true,
+			"CheckByExtension":true
+		},
+
+		"MoveDirectory":
+		{
+			"Path" : "../Bin/"
+		}
+	},
+
+	"Arborescence":
+	{
+		"StartPath":"../",
+		"Directories":
+		[
+			{
+				"Name":"FileChecker",
+				"ExcludeFromNomenclatureCheck" : true,
+				"ExcludeFromExtensionCheck" : true,
+				"ExcludeRecursiveChecks" : true,
+				"NomenclatureRestrict" :
+				[
+				],
+				"ExtensionRestrict" :
+				[
+				],
+				"Directories" : []
+			},
+
+			{
+				"Name":"Bin",
+				"ExcludeFromNomenclatureCheck" : true,
+				"ExcludeFromExtensionCheck" : true,
+				"ExcludeRecursiveChecks" : true,
+				"NomenclatureRestrict" :
+				[
+				],
+				"ExtensionRestrict" :
+				[
+				],
+				"Directories" : []
+			},
+
+			{
+				"Name":"Materials",
+				"ExcludeFromNomenclatureCheck" : true,
+				"ExcludeFromExtensionCheck" : false,
+				"ExcludeRecursiveChecks" : false,
+				"NomenclatureRestrict" :
+				[
+				],
+				"ExtensionRestrict" :
+				[
+					"txt"
+				],
+				"Directories" : 
+				[
+					{
+						"Name":"Scripts",
+						"ExcludeFromNomenclatureCheck" : true,
+						"ExcludeFromExtensionCheck" : true,
+						"ExcludeRecursiveChecks" : true,
+						"NomenclatureRestrict" :
+						[
+						],
+						"ExtensionRestrict" :
+						[
+						],
+						"Directories" : []
+					},
+
+					{
+						"Name":"Meshes",
+						"ExcludeFromNomenclatureCheck" : true,
+						"ExcludeFromExtensionCheck" : true,
+						"ExcludeRecursiveChecks" : true,
+						"NomenclatureRestrict" :
+						[
+						],
+						"ExtensionRestrict" :
+						[
+						],
+						"Directories" : []
+					}
+				]
+			}
+		]
+	}
+}

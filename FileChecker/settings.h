@@ -22,10 +22,20 @@ public:
 
 	struct DirectoryConfig
 	{
+		enum DirectoryFlags
+		{
+			None = 0,
+			Exclude_Nomenclature_Check = 1 << 0,
+			Exclude_Extension_Check = 1 << 1,
+			Exclude_Recursive_Check = 1 << 2,
+			Has_Been_Visited = 1 << 3
+		};
+
 		std::string name;
-		bool excludeFromNomenclatureCheck;
+		int flags;
+		/*bool excludeFromNomenclatureCheck;
 		bool excludeFromExtensionCheck;
-		bool excludeRecursiveChecks;
+		bool excludeRecursiveChecks;*/
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;

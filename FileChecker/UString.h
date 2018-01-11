@@ -8,6 +8,7 @@
 
 namespace Utility_String
 {
+	///Split a string and puts it in a preconstructed array.
 	template<typename Out>
 	void split(const std::string& _str, const char& _delimiter, Out _splitted)
 	{
@@ -19,6 +20,7 @@ namespace Utility_String
 				*(_splitted++) = split;
 	}
 
+	///Split a string and return a new vector
 	std::vector<std::string> split(const std::string& _str, const char& _delimiter)
 	{
 		std::vector<std::string> splittedStr;

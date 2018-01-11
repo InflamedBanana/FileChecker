@@ -116,7 +116,7 @@
     <ClCompile Include="fileManipulator.cpp" />
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NomenclatureChecker.cpp" />
+    <ClCompile Include="fileChecks.cpp" />
     <ClCompile Include="settings.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
     <ClInclude Include="Status.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="JsonParser.h" />
-    <ClInclude Include="nomenclatureChecker.h" />
+    <ClInclude Include="fileChecks.h" />
     <ClInclude Include="UString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
