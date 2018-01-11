@@ -128,7 +128,7 @@ void Application::NavigateThroughDirectories()
 {
 	m_status = APP_Status::S_RUNNING;
 
-	std::unordered_set<std::string> badFiles;
+	unordered_set<string> badFiles;
 
 	for( const auto& directory : m_settings.GetDirectoriesArborescence() )
 	{
@@ -142,15 +142,15 @@ void Application::NavigateThroughDirectories()
 	LogFilesSent( badFiles );
 }
 
-void Application::CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles )
+void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
 {
 	_path.append( _directory.name + "/" );
 
-	Arborescence::CheckArborescence( _path, _directory, _badFiles );
+	Arborescence::CheckArborescence( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Nomenclature_Check ) == 0 )
-		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles );
+		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles, m_settings.GetAssociatedFiles() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Extension_Check ) == 0 )
-		Extension::CheckFilesExtensions( _path, _directory, _badFiles );
+		Extension::CheckFilesExtensions( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
 	
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Recursive_Check ) == (int)DirectoryFlags::Exclude_Recursive_Check )
 		return;
@@ -159,17 +159,17 @@ void Application::CheckDirectory( std::string& _path, const Settings::DirectoryC
 		CheckDirectory( _path, subDir, _badFiles );
 }
 
-void Application::SendToBin( const std::unordered_set<std::string>& _files )
+void Application::SendToBin( const unordered_set<string>& _files )
 {
 	for( const auto& file : _files )
 		FileManipulator::MoveFile( file, m_settings.GetMoveDirectoryPath() );
 }
 
-void Application::LogFilesSent( const std::unordered_set<std::string>& _files )
+void Application::LogFilesSent( const unordered_set<string>& _files )
 {
-	std::cout << "------------ Check Report ------------" <<std::endl;
+	cout << "------------ Check Report ------------" <<endl;
 	for( const auto& file : _files )
-		std::cout << file << std::endl;
+		cout << file << endl;
 
-	std::cout << "Number of files sent to bin : " << _files.size() << std::endl;
+	cout << "Number of files sent to bin : " << _files.size() << endl;
 }

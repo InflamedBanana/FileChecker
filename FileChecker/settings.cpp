@@ -15,7 +15,7 @@ Settings::Settings( const std::string& filePath )
 
 Settings::~Settings() {}
 
-void Settings::LoadSettings( const std::string& filePath )
+bool Settings::LoadSettings( const std::string& filePath )
 {
 	// create directories with jsonparser;
 	if( !JSON_Parser::ConfigFileExists( filePath ) )
@@ -25,6 +25,7 @@ void Settings::LoadSettings( const std::string& filePath )
 		std::cout << "-------------------" << std::endl;
 		std::cout << "Config File created" << std::endl;
 		std::cout << "-------------------" << std::endl << std::endl;
+		return false;
 	}
 	Document parsedSettings( JSON_Parser::ParseFile( filePath ) );
 
@@ -62,6 +63,12 @@ void Settings::LoadSettings( const std::string& filePath )
 				const Value& moveDirectoryPath( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ][ "Path" ] );
 				m_moveDirectoryPath = moveDirectoryPath.GetString();
 			}
+			if( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ].HasMember( "Move_Associated_Files" ) )
+			{
+				const Value& associatedFile( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ][ "Move_Associated_Files" ] );
+				for( Value::ConstValueIterator mit = associatedFile.Begin(); mit != associatedFile.End(); ++mit )
+					m_associatedFiles.push_back( mit->GetString() );
+			}
 		}
 	}
 
@@ -78,6 +85,8 @@ void Settings::LoadSettings( const std::string& filePath )
 				m_directoriesArborescence.push_back( CreateDirectoryConfig( ( *it ) ) );
 		}
 	}
+
+	return true;
 }
 
 Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
@@ -91,17 +100,17 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 		newDir.name = value[ "Name" ].GetString();
 	}
 
-	if( value.HasMember( "ExcludeFromNomenclatureCheck" ) && value[ "ExcludeFromNomenclatureCheck" ].GetBool() )
+	if( value.HasMember( "Exclude_Nomenclature_Check" ) && value[ "Exclude_Nomenclature_Check" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check;
 	}
 
-	if( value.HasMember( "ExcludeFromExtensionCheck" ) && value[ "ExcludeFromExtensionCheck" ].GetBool() )
+	if( value.HasMember( "Exclude_Extension_Check" ) && value[ "Exclude_Extension_Check" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check;
 	}
 
-	if( value.HasMember( "ExcludeRecursiveChecks" ) && value[ "ExcludeRecursiveChecks" ].GetBool() )
+	if( value.HasMember( "Exclude_Recursive_Checks" ) && value[ "Exclude_Recursive_Checks" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
 	}
@@ -111,6 +120,15 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 	{
 		for( Value::ConstValueIterator it = value[ "ExtensionRestrict" ].Begin(); it != value[ "ExtensionRestrict" ].End(); ++it )
 			newDir.extensionRestricts.push_back( it->GetString() );
+
+		if( m_associatedFiles.size() > 0 )
+		{
+			for( const auto& associatedFile : m_associatedFiles )
+			{
+				newDir.extensionRestricts.push_back( associatedFile );
+				std::cout << "push associated file : " << associatedFile << std::endl;
+			}
+		}
 	}
 
 	if( value.HasMember( "Directories" ) )

@@ -12,15 +12,10 @@
 			}
 		},
 
-		"ArborescenceConfig":
-		{
-			"CheckByNomenclature": true,
-			"CheckByExtension":true
-		},
-
 		"MoveDirectory":
 		{
-			"Path" : "../Bin/"
+			"Path" : "../Bin/",
+			"Move_Associated_Files" : [".meta"]
 		}
 	},
 
@@ -31,12 +26,9 @@
 		[
 			{
 				"Name":"FileChecker",
-				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : true,
-				"ExcludeRecursiveChecks" : true,
-				"NomenclatureRestrict" :
-				[
-				],
+				"Exclude_Nomenclature_Check" : true,
+				"Exclude_Extension_Check" : true,
+				"Exclude_Recursive_Checks" : true,
 				"ExtensionRestrict" :
 				[
 				],
@@ -45,12 +37,9 @@
 
 			{
 				"Name":"Bin",
-				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : true,
-				"ExcludeRecursiveChecks" : true,
-				"NomenclatureRestrict" :
-				[
-				],
+				"Exclude_Nomenclature_Check" : true,
+				"Exclude_Extension_Check" : true,
+				"Exclude_Recursive_Checks" : true,
 				"ExtensionRestrict" :
 				[
 				],
@@ -59,12 +48,9 @@
 
 			{
 				"Name":"Materials",
-				"ExcludeFromNomenclatureCheck" : false,
-				"ExcludeFromExtensionCheck" : true,
-				"ExcludeRecursiveChecks" : true,
-				"NomenclatureRestrict" :
-				[
-				],
+				"Exclude_Nomenclature_Check" : false,
+				"Exclude_Extension_Check" : false,
+				"Exclude_Recursive_Checks" : true,
 				"ExtensionRestrict" :
 				[
 					".txt"
@@ -73,12 +59,9 @@
 				[
 					{
 						"Name":"Scripts",
-						"ExcludeFromNomenclatureCheck" : true,
-						"ExcludeFromExtensionCheck" : true,
-						"ExcludeRecursiveChecks" : true,
-						"NomenclatureRestrict" :
-						[
-						],
+						"Exclude_Nomenclature_Check" : true,
+						"Exclude_Extension_Check" : true,
+						"Exclude_Recursive_Checks" : true,
 						"ExtensionRestrict" :
 						[
 						],
@@ -86,13 +69,10 @@
 					},
 
 					{
-						"Name":"Meshes",
-						"ExcludeFromNomenclatureCheck" : true,
-						"ExcludeFromExtensionCheck" : true,
-						"ExcludeRecursiveChecks" : true,
-						"NomenclatureRestrict" :
-						[
-						],
+						"Name":"Wesh",
+						"Exclude_Nomenclature_Check" : true,
+						"Exclude_Extension_Check" : true,
+						"Exclude_Recursive_Checks" : true,
 						"ExtensionRestrict" :
 						[
 						],

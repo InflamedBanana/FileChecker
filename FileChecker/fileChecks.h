@@ -8,17 +8,20 @@
 
 namespace Nomenclature
 {
-	void CheckNomenclature( const std::string& _path, const Settings::NomenclatureConfig& _nomenclatureConfig, std::unordered_set<std::string>& _badFiles );
+	void CheckNomenclature( const std::string& _path, const Settings::NomenclatureConfig& _nomenclatureConfig, 
+							std::unordered_set<std::string>& _badFiles, const std::vector<std::string>& _associatedFiles );
 }
 
 namespace Arborescence
 {
-	void CheckArborescence( const std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles );
+	void CheckArborescence( const std::string& _path, const Settings::DirectoryConfig& _directory,
+							std::unordered_set<std::string>& _badFiles, const std::vector<std::string>& _associatedFiles );
 }
 
 namespace Extension
 {
-	void CheckFilesExtensions( const std::string& _path, const Settings::DirectoryConfig& _dirConfig, std::unordered_set<std::string>& _badFiles );
+	void CheckFilesExtensions( const std::string& _path, const Settings::DirectoryConfig& _dirConfig
+							   , std::unordered_set<std::string>& _badFiles, const std::vector<std::string>& _associatedFiles );
 }
 
 #endif

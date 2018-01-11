@@ -50,9 +50,10 @@ public:
 	NomenclatureConfig GetNomenclatureConfig() const { return m_nomenclatureConfig; }
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
+	std::vector<std::string> GetAssociatedFiles() const { return m_associatedFiles; }
 
 private:
-	void LoadSettings( const std::string& filePath );
+	bool LoadSettings( const std::string& filePath );
 	DirectoryConfig CreateDirectoryConfig( const rapidjson::Value& value );
 	//void SaveSetting(const std::string& filePath); when there is an interface
 
@@ -60,6 +61,8 @@ private:
 	std::string m_arborescenceStartPath;
 	NomenclatureConfig m_nomenclatureConfig;
 	std::string m_moveDirectoryPath;
+	std::vector<std::string> m_associatedFiles;
+
 };
 
 #endif
