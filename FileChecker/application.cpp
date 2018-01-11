@@ -135,8 +135,9 @@ void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig
 	if( _directory.name == "Bin" || _directory.name == "FileChecker" ) // replace by DirectoryConfig of StartPath
 		return;
 
-	_path.append( _directory.name + "/" );
-	
+	_path.append( _directory.name );
+	if( _path.back() != '/' ) _path.append( "/" );
+
 	Arborescence::CheckArborescence( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Nomenclature_Check ) == 0 )
 		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles, m_settings.GetAssociatedFiles() );

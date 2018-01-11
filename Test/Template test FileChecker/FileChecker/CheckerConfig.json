@@ -57,7 +57,7 @@
 
 					{
 						"Name":"Materials",
-						"Exclude_Nomenclature_Check" : false,
+						"Exclude_Nomenclature_Check" : true,
 						"Exclude_Extension_Check" : false,
 						"Exclude_Recursive_Checks" : true,
 						"ExtensionRestrict" :
