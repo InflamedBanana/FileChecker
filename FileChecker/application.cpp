@@ -161,12 +161,12 @@ void Application::CheckDirectory( std::string& _path, const Settings::DirectoryC
 	_path.append( _directory.name + "/" );
 
 	Arborescence::CheckArborescence( _path, _directory, _badFiles );
-	if( ( _directory.flags & DirectoryFlags::Exclude_Nomenclature_Check ) != DirectoryFlags::Exclude_Nomenclature_Check )
+	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Nomenclature_Check ) == 0 )
 		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles );
-	if( ( _directory.flags & DirectoryFlags::Exclude_Extension_Check ) != DirectoryFlags::Exclude_Extension_Check )
+	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Extension_Check ) == 0 )
 		Extension::CheckFilesExtensions( _path, _directory, _badFiles );
 	
-	if( ( _directory.flags & DirectoryFlags::Exclude_Recursive_Check ) == DirectoryFlags::Exclude_Recursive_Check )
+	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Recursive_Check ) == (int)DirectoryFlags::Exclude_Recursive_Check )
 		return;
 
 	for( const auto& subDir : _directory.subDirectories )

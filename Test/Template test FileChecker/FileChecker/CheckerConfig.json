@@ -8,7 +8,7 @@
 			{
 				"Prefix": ["Test"],
 				"Type" : ["Mat"],
-				"Name" : [""]
+				"Name" : []
 			}
 		},
 
@@ -59,9 +59,9 @@
 
 			{
 				"Name":"Materials",
-				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : false,
-				"ExcludeRecursiveChecks" : false,
+				"ExcludeFromNomenclatureCheck" : false,
+				"ExcludeFromExtensionCheck" : true,
+				"ExcludeRecursiveChecks" : true,
 				"NomenclatureRestrict" :
 				[
 				],

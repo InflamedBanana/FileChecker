@@ -77,18 +77,18 @@ typedef Settings::DirectoryConfig::DirectoryFlags DirectoryFlags;
 //	//vector<string> fileName(SplitFileName(file, settings));
 //	vector<string> fileName( uString::split( file.filename().string(), settings.GetNomenclatureConfig().separator ) );
 //
-//	for( int i = 0; i < settings.GetNomenclatureConfig().definitions.size(); ++i )
-//	{
-//		if( i >= fileName.size() ) return false;
-//		if( settings.GetNomenclatureConfig().definitions[ i ].size() == 0 ) return true;
-//
-//		bool isBadlyNamed( true );
-//
-//		for( const auto& nDef : settings.GetNomenclatureConfig().definitions[ i ] )
-//			if( fileName[ i ].compare( nDef ) == 0 ) isBadlyNamed = false;
-//
-//		if( isBadlyNamed ) return false;
-//	}
+	//for( int i = 0; i < settings.GetNomenclatureConfig().definitions.size(); ++i )
+	//{
+	//	if( i >= fileName.size() ) return false;
+	//	if( settings.GetNomenclatureConfig().definitions[ i ].size() == 0 ) return true;
+
+	//	bool isBadlyNamed( true );
+
+	//	for( const auto& nDef : settings.GetNomenclatureConfig().definitions[ i ] )
+	//		if( fileName[ i ].compare( nDef ) == 0 ) isBadlyNamed = false;
+
+	//	if( isBadlyNamed ) return false;
+	//}
 //	return true;
 //}
 
@@ -96,9 +96,9 @@ namespace Nomenclature
 {
 	namespace
 	{
-		bool CompareNomenclature( const std::string& _file, const Settings::NomenclatureConfig& _nomenclatureConfig )
+		bool CompareNomenclature( const fs::path& _file, const Settings::NomenclatureConfig& _nomenclatureConfig )
 		{
-			std::vector<std::string> fileName( uString::split( _file, _nomenclatureConfig.separator ) );
+			std::vector<std::string> fileName( uString::split( _file.filename().string(), _nomenclatureConfig.separator ) );
 
 			if( _nomenclatureConfig.definitions.size() > fileName.size() ) return false;
 
@@ -106,15 +106,16 @@ namespace Nomenclature
 			{
 				if( _nomenclatureConfig.definitions[ i ].size() == 0 ) continue;
 
-				if( !any_of( _nomenclatureConfig.definitions[i].begin(), _nomenclatureConfig.definitions[i].end(),
-					[&i, &fileName]( const std::string _definition ) { return fileName[ i ].compare( _definition ); } ) )
+
+				if( !std::any_of( _nomenclatureConfig.definitions[ i ].begin(), _nomenclatureConfig.definitions[ i ].end(),
+					[&i, &fileName]( const std::string _definition ) { return ( _definition.compare( fileName[ i ] ) == 0 ); } ) )
 					return false;
 			}
 			return true;
 		}
 	}
 
-	void CheckNomenclature(const std::string& _path, const Settings::NomenclatureConfig& _nomenclatureConfig, std::vector<std::string>& _badFiles )
+	void CheckNomenclature( const std::string& _path, const Settings::NomenclatureConfig& _nomenclatureConfig, std::vector<std::string>& _badFiles )
 	{
 		for( auto& file : FileManipulator::GetFilesInDirectory( _path ) )
 		{
@@ -124,7 +125,7 @@ namespace Nomenclature
 		_badFiles.push_back( "Nomenclature" );
 	}
 
-	
+
 }
 
 namespace Arborescence
@@ -158,15 +159,13 @@ namespace Extension
 		{
 			if( !_file.has_extension() ) return false;
 			if( _extensions.size() == 0 ) return false;
-			std::cout << "file : " << _file.string() << " file extension " << _file.extension().string() << std::endl;
-			return std::any_of( _extensions.begin(), _extensions.end(), [&_file]( const std::string& _str ) { return _str.compare( _file.extension().string() ); } );
+
+			return std::any_of( _extensions.begin(), _extensions.end(), [&_file]( const std::string& _str ) { return ( _str.compare( _file.extension().string() ) == 0 ); } );
 		}
 	}
 
 	void CheckFilesExtensions( const std::string & _path, const Settings::DirectoryConfig & _dirConfig, std::vector<std::string>& _badFiles )
 	{
-		std::cout << "directory : " << _dirConfig.name << std::endl;
-		std::cout << "directory extensions :" << std::endl;
 		for( const auto& ext : _dirConfig.extensionRestricts )
 			std::cout << ext << std::endl;
 
