@@ -68,16 +68,6 @@ namespace FileManipulator
 		return false;
 	}
 
-	/*bool RenameFile(const fs::path &_filePath, const string &newName, const bool &addExtension)
-	{
-		std::string newFileName(newName);
-
-		if( addExtension )
-			newFileName.append( _filePath.extension().string() );
-
-		return MoveFile(_filePath, fs::path(_filePath).replace_filename(newFileName) );
-	}*/
-
 	bool RenameFile( const std::string &_filePath, const string &newName )
 	{
 		fs::path filePath( _filePath );
@@ -90,20 +80,11 @@ namespace FileManipulator
 		return error.value() == 0;
 	}
 
-	//bool MoveFile(const fs::path &filePath, const fs::path &destinationPath)
-	//{
-	//	error_code error;
-	//	fs::rename(filePath, destinationPath, error);
-
-	//	return ( error.value() == 0 );
-	//}
-
 	bool MoveFile( const std::string &_filePath, const std::string &_destinationPath )
 	{
 		error_code error;
 		fs::path file( _filePath ), destination( _destinationPath );
 
-		//fs::rename( filePath, destinationPath, error );
 		fs::rename( file, destination / file.filename(), error );
 		return error.value() == 0;
 	}

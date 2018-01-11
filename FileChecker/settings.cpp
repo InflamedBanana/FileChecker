@@ -98,48 +98,36 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 	assert( value.IsObject() );
 
 	Settings::DirectoryConfig newDir;
-	newDir.flags = 0;
-	//std::cout << "flags : " << newDir.flags << std::endl;
 
 	if( value.HasMember( "Name" ) )
 	{
 		newDir.name = value[ "Name" ].GetString();
-		//std::cout << "directory name : "<< newDir.name << std::endl;
 	}
+
 	if( value.HasMember( "ExcludeFromNomenclatureCheck" ) && value[ "ExcludeFromNomenclatureCheck" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check;
-		//std::cout << "exclude nomenclature Check" << std::endl;
 	}
+
 	if( value.HasMember( "ExcludeFromExtensionCheck" ) && value[ "ExcludeFromExtensionCheck" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check;
-		//std::cout << "exclude extensionCheck Check" << std::endl;
 	}
+
 	if( value.HasMember( "ExcludeRecursiveChecks" ) && value[ "ExcludeRecursiveChecks" ].GetBool() )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
-		//std::cout << "exclude recursive Check" << std::endl;
-
 	}
 	
-	//std::cout << "newDir.flag : " << newDir.flags << std::endl;
-	std::cout << "flag & nomenclagure flag : " << ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check )
-		<< "  flag & extensionFlag " << ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check ) << std::endl;
-
 	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check ) == 0
 		&& value.HasMember( "NomenclatureRestrict" ) )
 	{
-		std::cout << "add nomenclature restricts" << std::endl;
-
 		for( Value::ConstValueIterator it = value[ "NomenclatureRestrict" ].Begin(); it != value[ "NomenclatureRestrict" ].End(); ++it )
 			newDir.nomenclatureRestricts.push_back( it->GetString() );
 	}
 	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check ) == 0
 		&& value.HasMember( "ExtensionRestrict" ) )
 	{
-		std::cout << "add extension restricts" << std::endl;
-
 		for( Value::ConstValueIterator it = value[ "ExtensionRestrict" ].Begin(); it != value[ "ExtensionRestrict" ].End(); ++it )
 			newDir.extensionRestricts.push_back( it->GetString() );
 	}

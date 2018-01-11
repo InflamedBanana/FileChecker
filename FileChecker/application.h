@@ -4,13 +4,13 @@
 
 #include "Status.h"
 #include "settings.h"
+#include <unordered_set>
 #define CONFIG_FILE_PATH "./CheckerConfig.json"
 #define APPLICATION_PATH "../FileChecker"
 
 class Application
 {
 	static Application* s_application;
-	//static Settings* s_settings;
 
 public:
 	Application();
@@ -27,8 +27,6 @@ private:
 	enum MenuItem
 	{
 		MENU_NULL,
-		/*	MENU_NOMENCLATURE_CHECKER,
-			MENU_ARBORESCENCE_CHECKER,*/
 		MENU_SETTINGS,
 		MENU_RUN_ALL,
 		MENU_QUIT,
@@ -40,9 +38,9 @@ private:
 	void ShowSettings();
 
 	void NavigateThroughDirectories();
-	void CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::vector<std::string>& _badFiles );
-	void SendToBin( const std::vector<std::string>& _file );
-	void LogFilesSent( const std::vector<std::string>& _files );
+	void CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles );
+	void SendToBin( const std::unordered_set<std::string>& _file );
+	void LogFilesSent( const std::unordered_set<std::string>& _files );
 
 	Settings   m_settings;
 	MenuItem   m_menuChoice;

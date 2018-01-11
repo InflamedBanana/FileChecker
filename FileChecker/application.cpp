@@ -37,13 +37,6 @@ void Application::Menu()
 		case MenuItem::MENU_QUIT:
 			Quit();
 			break;
-			//case MenuItem::MENU_NOMENCLATURE_CHECKER:
-			//	NomenclatureChecker::Start( m_settings );
-			//	Menu();
-			//	break;
-			//case MenuItem::MENU_ARBORESCENCE_CHECKER:
-			//	ArborescenceChecker::Start( m_settings ); Menu(); 
-			//	break;
 		case MenuItem::MENU_SETTINGS:
 			ShowSettings();
 			Menu();
@@ -62,8 +55,6 @@ void Application::Menu()
 Application::MenuItem Application::ChooseAction()
 {
 	cout << endl << "======== MENU =======" << endl << endl;
-	//cout << "1. Nomenclature Check" << endl;
-	//cout << "2. Arborescence Check" << endl;
 	cout << "1. Run File Checker" << endl;
 	cout << "2. Settings" << endl;
 	cout << "3. Quit" << endl;
@@ -76,8 +67,6 @@ Application::MenuItem Application::ChooseAction()
 
 		switch( input )
 		{
-			/*case '1': return MenuItem::MENU_NOMENCLATURE_CHECKER;
-			case '2': return MenuItem::MENU_ARBORESCENCE_CHECKER;*/
 			case '1': return MenuItem::MENU_RUN_ALL;
 			case '2': return MenuItem::MENU_SETTINGS;
 			case '3': return MenuItem::MENU_QUIT;
@@ -142,7 +131,7 @@ void Application::NavigateThroughDirectories()
 {
 	m_status = APP_Status::S_RUNNING;
 
-	std::vector<std::string> badFiles;
+	std::unordered_set<std::string> badFiles;
 
 	for( const auto& directory : m_settings.GetDirectoriesArborescence() )
 	{
@@ -156,7 +145,7 @@ void Application::NavigateThroughDirectories()
 	LogFilesSent( badFiles );
 }
 
-void Application::CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::vector<std::string>& _badFiles )
+void Application::CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles )
 {
 	_path.append( _directory.name + "/" );
 
@@ -173,13 +162,13 @@ void Application::CheckDirectory( std::string& _path, const Settings::DirectoryC
 		CheckDirectory( _path, subDir, _badFiles );
 }
 
-void Application::SendToBin( const std::vector<std::string>& _files )
+void Application::SendToBin( const std::unordered_set<std::string>& _files )
 {
 	for( const auto& file : _files )
 		FileManipulator::MoveFile( file, m_settings.GetMoveDirectoryPath() );
 }
 
-void Application::LogFilesSent( const std::vector<std::string>& _files )
+void Application::LogFilesSent( const std::unordered_set<std::string>& _files )
 {
 	std::cout << "------------ Check Report ------------" <<std::endl;
 	for( const auto& file : _files )

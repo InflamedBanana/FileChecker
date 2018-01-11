@@ -6,12 +6,11 @@
 #include <vector>
 #include <string>
 #include <rapidjson\document.h>
-//namespace fs = std::experimental::filesystem;
 
 class Settings
 {
 private:
-	
+
 
 public:
 	struct FileValidationConfig
@@ -31,11 +30,11 @@ public:
 			Has_Been_Visited = 1 << 3
 		};
 
+		DirectoryConfig() : name( "" ), flags( 0 ) {}
+		DirectoryConfig( std::string _name ) : name( _name ), flags( 0 ) {}
+
 		std::string name;
 		int flags;
-		/*bool excludeFromNomenclatureCheck;
-		bool excludeFromExtensionCheck;
-		bool excludeRecursiveChecks;*/
 		std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;
@@ -48,7 +47,7 @@ public:
 		std::vector<std::vector<std::string>> definitions;
 	};
 
-	Settings(const std::string& filePath);
+	Settings( const std::string& filePath );
 	~Settings();
 
 	std::vector<DirectoryConfig> GetDirectoriesArborescence() const { return m_directoriesArborescence; }
@@ -59,8 +58,8 @@ public:
 	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
 
 private:
-	void LoadSettings(const std::string& filePath);
-	DirectoryConfig CreateDirectoryConfig(const rapidjson::Value& value);
+	void LoadSettings( const std::string& filePath );
+	DirectoryConfig CreateDirectoryConfig( const rapidjson::Value& value );
 	//void SaveSetting(const std::string& filePath); when there is an interface
 
 	std::vector<DirectoryConfig> m_directoriesArborescence;
