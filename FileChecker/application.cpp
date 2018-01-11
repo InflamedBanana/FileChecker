@@ -115,8 +115,8 @@ void Application::ShowSettings()
 		}
 	}
 
-	cout << endl << "Check by nomenclature : " << m_settings.GetFileValidationConfig().checkByNomenclature << endl;
-	cout << "Check by extension : " << m_settings.GetFileValidationConfig().checkByExtension << endl;
+	//cout << endl << "Check by nomenclature : " << m_settings.GetFileValidationConfig().checkByNomenclature << endl;
+	//cout << "Check by extension : " << m_settings.GetFileValidationConfig().checkByExtension << endl;
 
 	cout << "Move Directory Path : " << m_settings.GetMoveDirectoryPath() << endl;
 	cout << endl << "Arborescence Start Path : " << m_settings.GetArborescenceStartPath() << endl;

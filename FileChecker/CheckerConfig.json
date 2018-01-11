@@ -12,12 +12,6 @@
 			}
 		},
 
-		"ArborescenceConfig":
-		{
-			"CheckByNomenclature": true,
-			"CheckByExtension":true
-		},
-
 		"MoveDirectory":
 		{
 			"Path" : "../Bin/"
@@ -33,9 +27,7 @@
 				"Name":"FileChecker",
 				"ExcludeFromNomenclatureCheck" : true,
 				"ExcludeFromExtensionCheck" : true,
-				"NomenclatureRestrict" :
-				[
-				],
+				"ExcludeRecursiveChecks" : true,
 				"ExtensionRestrict" :
 				[
 				],
@@ -45,11 +37,9 @@
 			{
 				"Name":"Bin",
 				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : true, 
-				"NomenclatureRestrict" :
-				[
-				],
-				"ExtensionRestrict" :
+				"ExcludeFromExtensionCheck" : true,
+				"ExcludeRecursiveChecks" : true
+,				"ExtensionRestrict" :
 				[
 				],
 				"Directories" : []

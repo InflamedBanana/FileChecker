@@ -55,19 +55,6 @@ void Settings::LoadSettings( const std::string& filePath )
 				}
 			}
 		}
-		if( parsedSettings[ "FileChecker configs" ].HasMember( "ArborescenceConfig" ) )
-		{
-			if( parsedSettings[ "FileChecker configs" ][ "ArborescenceConfig" ].HasMember( "CheckByNomenclature" ) )
-			{
-				const Value& nomenclatureCheck( parsedSettings[ "FileChecker configs" ][ "ArborescenceConfig" ][ "CheckByNomenclature" ] );
-				m_fileValidationConfig.checkByNomenclature = nomenclatureCheck.GetBool();
-			}
-			if( parsedSettings[ "FileChecker configs" ][ "ArborescenceConfig" ].HasMember( "CheckByExtension" ) )
-			{
-				const Value& extensionCheck( parsedSettings[ "FileChecker configs" ][ "ArborescenceConfig" ][ "CheckByExtension" ] );
-				m_fileValidationConfig.checkByExtension = extensionCheck.GetBool();
-			}
-		}
 		if( parsedSettings[ "FileChecker configs" ].HasMember( "MoveDirectory" ) )
 		{
 			if( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ].HasMember( "Path" ) )
@@ -119,12 +106,6 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
 	}
 	
-	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check ) == 0
-		&& value.HasMember( "NomenclatureRestrict" ) )
-	{
-		for( Value::ConstValueIterator it = value[ "NomenclatureRestrict" ].Begin(); it != value[ "NomenclatureRestrict" ].End(); ++it )
-			newDir.nomenclatureRestricts.push_back( it->GetString() );
-	}
 	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check ) == 0
 		&& value.HasMember( "ExtensionRestrict" ) )
 	{

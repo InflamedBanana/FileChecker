@@ -13,11 +13,6 @@ private:
 
 
 public:
-	struct FileValidationConfig
-	{
-		bool checkByNomenclature;
-		bool checkByExtension;
-	};
 
 	struct DirectoryConfig
 	{
@@ -35,7 +30,7 @@ public:
 
 		std::string name;
 		int flags;
-		std::vector<std::string> nomenclatureRestricts;
+		//std::vector<std::string> nomenclatureRestricts;
 		std::vector<std::string> extensionRestricts;
 		std::vector<DirectoryConfig> subDirectories;
 	};
@@ -53,7 +48,6 @@ public:
 	std::vector<DirectoryConfig> GetDirectoriesArborescence() const { return m_directoriesArborescence; }
 
 	NomenclatureConfig GetNomenclatureConfig() const { return m_nomenclatureConfig; }
-	FileValidationConfig GetFileValidationConfig() { return m_fileValidationConfig; }
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::string GetArborescenceStartPath() const { return m_arborescenceStartPath; }
 
@@ -65,7 +59,6 @@ private:
 	std::vector<DirectoryConfig> m_directoriesArborescence;
 	std::string m_arborescenceStartPath;
 	NomenclatureConfig m_nomenclatureConfig;
-	FileValidationConfig m_fileValidationConfig;
 	std::string m_moveDirectoryPath;
 };
 
