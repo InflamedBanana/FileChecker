@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <rapidjson\document.h>
+#include <unordered_set>
 
 class Settings
 {
@@ -21,8 +22,7 @@ public:
 			None = 0,
 			Exclude_Nomenclature_Check = 1 << 0,
 			Exclude_Extension_Check = 1 << 1,
-			Exclude_Recursive_Check = 1 << 2,
-			Has_Been_Visited = 1 << 3
+			Exclude_Recursive_Check = 1 << 2
 		};
 
 		DirectoryConfig() : name( "" ), flags( 0 ) {}
@@ -50,16 +50,19 @@ public:
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::vector<std::string> GetAssociatedFiles() const { return m_associatedFiles; }
 
+	void MoveToBin( const std::unordered_set<std::string>& _files,const bool _logFiles = true);
+
 private:
 	bool LoadSettings( const std::string& filePath );
 	DirectoryConfig CreateDirectoryConfig( const rapidjson::Value& value );
+	void CreateBinDirectory();
+	void LogFilesSentToBin( const std::unordered_set<std::string>& _files );
 	//void SaveSetting(const std::string& filePath); when there is an interface
 
 	DirectoryConfig m_arborescenceRootDirectory;
 	NomenclatureConfig m_nomenclatureConfig;
 	std::string m_moveDirectoryPath;
 	std::vector<std::string> m_associatedFiles;
-
 };
 
 #endif

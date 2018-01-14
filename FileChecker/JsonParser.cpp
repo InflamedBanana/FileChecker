@@ -1,15 +1,15 @@
 #include "JsonParser.h"
-#include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "fileManipulator.h"
 
 using namespace std;
 using namespace rapidjson;
 
-void JSON_Parser::GenerateConfigFile(const string& filePath)
+void JSON_Parser::GenerateConfigFile( const string& filePath )
 {
-	std::ofstream configFile(filePath);
+	std::ofstream configFile( filePath );
 
 	configFile <<
 		"{\n"
@@ -48,6 +48,16 @@ void JSON_Parser::GenerateConfigFile(const string& filePath)
 		"				\"Directories\" : \n"
 		"				[\n"
 		"					{\n"
+		"						\"Name\":\"Template\",\n"
+		"						\"Exclude_Nomenclature_Check\" : true,\n"
+		"						\"Exclude_Extension_Check\" : true,\n"
+		"						\"Exclude_Recursive_Checks\" : true,\n"
+		"						\"ExtensionRestrict\" :\n"
+		"						[\n"
+		"						],\n"
+		"						\"Directories\" : []\n"
+		"					}\n"
+		/*"					{\n"
 		"						\"Name\":\"FileChecker\",\n"
 		"						\"Exclude_Nomenclature_Check\" : true,\n"
 		"						\"Exclude_Extension_Check\" : true,\n"
@@ -67,7 +77,7 @@ void JSON_Parser::GenerateConfigFile(const string& filePath)
 		"						[\n"
 		"						],\n"
 		"						\"Directories\" : []\n"
-		"					}\n"
+		"					}\n"*/
 		"				]\n"
 		"			}\n"
 		"		]\n"
@@ -77,30 +87,25 @@ void JSON_Parser::GenerateConfigFile(const string& filePath)
 	configFile.close();
 }
 
-bool JSON_Parser::ConfigFileExists(const string& filePath)
+Document JSON_Parser::ParseFile( const std::string& _filePath )
 {
-	std::experimental::filesystem::path configFilePath( filePath );
-	return std::experimental::filesystem::exists(configFilePath);
-}
+	//if ( !ConfigFileExists( filePath ) ) // in case it's been deleted during
+	if( !FileManipulator::PathExists( _filePath ) )
+		GenerateConfigFile( _filePath );
 
-Document JSON_Parser::ParseFile(const std::string &filePath)
-{
-	if ( !ConfigFileExists( filePath ) ) // in case it's been deleted during
-		GenerateConfigFile( filePath );
+	fstream file( _filePath );
 
-	fstream file( filePath );
-
-	if (!file) return nullptr;
+	if( !file ) return nullptr;
 
 	string json;
-	
+
 	{
 		string temp;
-		while (getline(file, temp) )
-			json.append(temp);
+		while( getline( file, temp ) )
+			json.append( temp );
 	}
-	
+
 	Document doc;
-	doc.Parse(json.c_str());
+	doc.Parse( json.c_str() );
 	return doc;
 }

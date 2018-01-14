@@ -2,9 +2,9 @@
 #include <fstream>
 #include "JsonParser.h"
 #include <iostream>
-#include <memory>
+#include "fileManipulator.h"
+#include "application_paths.h"
 
-//using namespace std;
 using namespace rapidjson;
 
 
@@ -15,19 +15,45 @@ Settings::Settings( const std::string& filePath )
 
 Settings::~Settings() {}
 
-bool Settings::LoadSettings( const std::string& filePath )
+void Settings::MoveToBin( const std::unordered_set<std::string>& _files, const bool _logFiles )
+{
+	if( !FileManipulator::PathExists( BIN_DIRECTORY_PATH ) )
+		CreateBinDirectory();
+
+	for( const auto& file : _files )
+		FileManipulator::MoveFile( file, BIN_DIRECTORY_PATH );
+
+	if( _logFiles )
+		LogFilesSentToBin( _files );
+}
+
+void Settings::CreateBinDirectory()
+{
+	FileManipulator::CreateDirectory( BIN_DIRECTORY_PATH );
+}
+
+void Settings::LogFilesSentToBin( const std::unordered_set<std::string>& _files )
+{
+	std::cout << "------------ Check Report ------------" << std::endl;
+	for( const auto& file : _files )
+		std::cout << file << std::endl;
+
+	std::cout << "Number of files sent to bin : " << _files.size() << std::endl;
+}
+
+bool Settings::LoadSettings( const std::string& _filePath )
 {
 	// create directories with jsonparser;
-	if( !JSON_Parser::ConfigFileExists( filePath ) )
+	if( !FileManipulator::PathExists( _filePath ) )
 	{
-		JSON_Parser::GenerateConfigFile( filePath );
+		JSON_Parser::GenerateConfigFile( _filePath );
 
 		std::cout << "-------------------" << std::endl;
 		std::cout << "Config File created" << std::endl;
 		std::cout << "-------------------" << std::endl << std::endl;
 		return false;
 	}
-	Document parsedSettings( JSON_Parser::ParseFile( filePath ) );
+	Document parsedSettings( JSON_Parser::ParseFile( _filePath ) );
 
 	if( parsedSettings.HasMember( "FileChecker configs" ) )
 	{
@@ -83,6 +109,23 @@ bool Settings::LoadSettings( const std::string& filePath )
 				//m_directoriesArborescence.push_back( CreateDirectoryConfig( ( *it ) ) );
 				m_arborescenceRootDirectory = CreateDirectoryConfig( ( *it ) );
 			}
+
+			//Move That somewhere else
+			DirectoryConfig binDirectory;
+
+			int flags = (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check | (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check
+				| (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
+			
+			binDirectory.flags = flags;
+			binDirectory.name = "Bin";
+			m_arborescenceRootDirectory.subDirectories.push_back( binDirectory );
+
+			DirectoryConfig fileDirectory;
+			fileDirectory.flags = flags;
+			fileDirectory.name = "FileChecker";
+			m_arborescenceRootDirectory.subDirectories.push_back( fileDirectory );
+
+			//m_arborescenceRootDirectory
 		}
 	}
 
@@ -114,7 +157,7 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 	{
 		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
 	}
-	
+
 	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check ) == 0
 		&& value.HasMember( "ExtensionRestrict" ) )
 	{
@@ -124,10 +167,7 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 		if( m_associatedFiles.size() > 0 )
 		{
 			for( const auto& associatedFile : m_associatedFiles )
-			{
 				newDir.extensionRestricts.push_back( associatedFile );
-				std::cout << "push associated file : " << associatedFile << std::endl;
-			}
 		}
 	}
 

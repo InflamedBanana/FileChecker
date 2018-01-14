@@ -38,7 +38,7 @@ namespace FileManipulator
 		for( const auto& file : fs::directory_iterator( _directoryPath ) )
 			if( fs::is_directory( file ) && file.path().filename().compare( _directoryName ) == 0 )
 				return file.path().string();
-		
+
 		return "";
 	}
 
@@ -59,7 +59,7 @@ namespace FileManipulator
 
 	bool DirectoryContainsFile( const std::string& _directoryPath, const std::string& _fileName )
 	{
-		fs::path directory( _directoryPath ), fileToFind(_fileName);
+		fs::path directory( _directoryPath ), fileToFind( _fileName );
 
 		for( auto& file : fs::directory_iterator( directory ) )
 			if( file.path() == fileToFind )
@@ -95,5 +95,10 @@ namespace FileManipulator
 		fs::create_directories( _dirPath, error );
 
 		return error.value() == 0;
+	}
+
+	bool PathExists( const std::string & _path )
+	{
+		return fs::exists( _path );;
 	}
 }

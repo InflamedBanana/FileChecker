@@ -1,3 +1,4 @@
+#include <iostream>
 #include "fileChecks.h"
 #include "fileManipulator.h"
 #include <vector>
@@ -58,7 +59,9 @@ namespace Nomenclature
 			{
 				_badFiles.insert( file );
 				if( _associatedFiles.size() > 0 )
-					RemoveAssociatedFiles( _path, _badFiles, _associatedFiles );
+				{
+					RemoveAssociatedFiles( file, _badFiles, _associatedFiles );
+				}
 			}
 		}
 	}
@@ -75,6 +78,7 @@ namespace Arborescence
 
 		for( const auto& arboSubDir : _directory.subDirectories )
 		{
+			cout << "arbo check : " << arboSubDir.name << endl;
 			if( !FileManipulator::DirectoryContainsFile( _path, _path + arboSubDir.name ) )
 				FileManipulator::CreateDirectory( _path + arboSubDir.name );
 			else

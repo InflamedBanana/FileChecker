@@ -2,6 +2,7 @@
 #include "fileChecks.h"
 #include "fileManipulator.h"
 #include <iostream>
+#include "application_paths.h"
 
 using namespace std;
 
@@ -126,8 +127,7 @@ void Application::NavigateThroughDirectories()
 	string startPath( "" );
 	CheckDirectory( startPath, m_settings.GetArborescenceRootDirectory(), badFiles );
 
-	SendToBin( badFiles );
-	LogFilesSent( badFiles );
+	m_settings.MoveToBin( badFiles, true );
 }
 
 void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
@@ -149,19 +149,4 @@ void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig
 
 	for( const auto& subDir : _directory.subDirectories )
 		CheckDirectory( _path, subDir, _badFiles );
-}
-
-void Application::SendToBin( const unordered_set<string>& _files )
-{
-	for( const auto& file : _files )
-		FileManipulator::MoveFile( file, m_settings.GetMoveDirectoryPath() );
-}
-
-void Application::LogFilesSent( const unordered_set<string>& _files )
-{
-	cout << "------------ Check Report ------------" <<endl;
-	for( const auto& file : _files )
-		cout << file << endl;
-
-	cout << "Number of files sent to bin : " << _files.size() << endl;
 }

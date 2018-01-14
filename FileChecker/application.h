@@ -5,8 +5,6 @@
 #include "Status.h"
 #include "settings.h"
 #include <unordered_set>
-#define CONFIG_FILE_PATH "./CheckerConfig.json"
-#define APPLICATION_PATH "../FileChecker"
 
 class Application
 {
@@ -39,8 +37,6 @@ private:
 
 	void NavigateThroughDirectories();
 	void CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles );
-	void SendToBin( const std::unordered_set<std::string>& _file );
-	void LogFilesSent( const std::unordered_set<std::string>& _files );
 
 	Settings   m_settings;
 	MenuItem   m_menuChoice;

@@ -18,6 +18,7 @@ namespace FileManipulator
 	bool MoveFile( const std::string &_filePath, const std::string &_destinationPath );
 	bool RenameFile( const std::string &_filePath, const std::string &newName );
 	bool CreateDirectory( const std::string& _dirPath );
+	bool PathExists( const std::string& _path );
 };
 
 #endif // !DEF_FILEMANIP

@@ -9,7 +9,6 @@
 namespace JSON_Parser
 {
 	void GenerateConfigFile(const std::string& filePath);
-	bool ConfigFileExists(const std::string& filePath);
 	rapidjson::Document ParseFile(const std::string &filePath);
 }
 
