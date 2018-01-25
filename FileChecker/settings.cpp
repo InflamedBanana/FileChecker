@@ -53,20 +53,32 @@ bool Settings::LoadSettings( const std::string& _filePath )
 		std::cout << "-------------------" << std::endl << std::endl;
 		return false;
 	}
-	Document parsedSettings( JSON_Parser::ParseFile( _filePath ) );
+	Document* parsedSettings = new Document;
 
-	if( parsedSettings.HasMember( "FileChecker configs" ) )
+	if( !JSON_Parser::ParseFile( _filePath, parsedSettings ) )
+		return false;
+
+	Value* parentValue = &(*parsedSettings)["FileChecker configs"];
+
+	if( parsedSettings->HasMember( "FileChecker configs" ) )
 	{
-		if( parsedSettings[ "FileChecker configs" ].HasMember( "Nomenclature" ) )
+		Value* childValue = parentValue;
+
+		if( parentValue->HasMember( "Nomenclature" ) )
 		{
-			if( parsedSettings[ "FileChecker configs" ][ "Nomenclature" ].HasMember( "Separator" ) )
+			childValue = &( *parentValue )[ "Nomenclature" ];
+
+			if( childValue->HasMember( "Separator" ) )
 			{
-				const Value& separator( parsedSettings[ "FileChecker configs" ][ "Nomenclature" ][ "Separator" ] );
+				const Value& separator( (*childValue)[ "Separator" ] );
 				m_nomenclatureConfig.separator = separator.GetString()[ 0 ];
 			}
-			if( parsedSettings[ "FileChecker configs" ][ "Nomenclature" ].HasMember( "Definitions" ) )
+
+
+			if( childValue->HasMember( "Definitions" ) )
 			{
-				const Value& definitions( parsedSettings[ "FileChecker configs" ][ "Nomenclature" ][ "Definitions" ] );
+				const Value& definitions( (*childValue)[ "Definitions" ] );
+
 				if( definitions.IsObject() )
 				{
 					for( Value::ConstMemberIterator mit = definitions.GetObject().MemberBegin(); mit != definitions.GetObject().MemberEnd();
@@ -82,27 +94,33 @@ bool Settings::LoadSettings( const std::string& _filePath )
 				}
 			}
 		}
-		if( parsedSettings[ "FileChecker configs" ].HasMember( "MoveDirectory" ) )
+
+		if( parentValue->HasMember( "MoveDirectory" ) )
 		{
-			if( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ].HasMember( "Path" ) )
+			childValue = &( *parentValue )[ "MoveDirectory" ];
+			if( childValue->HasMember( "Path" ) )
 			{
-				const Value& moveDirectoryPath( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ][ "Path" ] );
+				const Value& moveDirectoryPath( (*childValue)[ "Path" ] );
 				m_moveDirectoryPath = moveDirectoryPath.GetString();
 			}
-			if( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ].HasMember( "Move_Associated_Files" ) )
+
+			if( childValue->HasMember( "Move_Associated_Files" ) )
 			{
-				const Value& associatedFile( parsedSettings[ "FileChecker configs" ][ "MoveDirectory" ][ "Move_Associated_Files" ] );
+				const Value& associatedFile( (*childValue)[ "Move_Associated_Files" ] );
+
 				for( Value::ConstValueIterator mit = associatedFile.Begin(); mit != associatedFile.End(); ++mit )
 					m_associatedFiles.push_back( mit->GetString() );
 			}
 		}
 	}
 
-	if( parsedSettings.HasMember( "Arborescence" ) )
+	if( parsedSettings->HasMember( "Arborescence" ) )
 	{
-		if( parsedSettings[ "Arborescence" ].HasMember( "Directories" ) )
+		parentValue = &( *parsedSettings )[ "Arborescence" ];
+
+		if( parentValue->HasMember( "Directories" ) )
 		{
-			const Value& directories = parsedSettings[ "Arborescence" ][ "Directories" ];
+			const Value& directories = (*parentValue)[ "Directories" ];
 
 			for( Value::ConstValueIterator it = directories.Begin(); it != directories.End(); ++it ) //FIXME that's bad, transform "Directories into object instead
 			{
@@ -139,26 +157,18 @@ Settings::DirectoryConfig Settings::CreateDirectoryConfig( const Value& value )
 	Settings::DirectoryConfig newDir;
 
 	if( value.HasMember( "Name" ) )
-	{
 		newDir.name = value[ "Name" ].GetString();
-	}
 
-	if( value.HasMember( "Exclude_Nomenclature_Check" ) && value[ "Exclude_Nomenclature_Check" ].GetBool() )
-	{
-		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check;
-	}
+	if( JSON_Parser::CheckBoolValue( value, "Exclude_Nomenclature_Check" ) )
+		newDir.flags |= DIRFLAG_EXCL_NOMENCLATURE;
 
-	if( value.HasMember( "Exclude_Extension_Check" ) && value[ "Exclude_Extension_Check" ].GetBool() )
-	{
-		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check;
-	}
+	if( JSON_Parser::CheckBoolValue( value, "Exclude_Extension_Check" ) )
+		newDir.flags |= DIRFLAG_EXCL_EXTENSION;
 
-	if( value.HasMember( "Exclude_Recursive_Checks" ) && value[ "Exclude_Recursive_Checks" ].GetBool() )
-	{
-		newDir.flags |= (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
-	}
+	if( JSON_Parser::CheckBoolValue( value, "Exclude_Recursive_Check" ) )
+		newDir.flags |= DIRFLAG_EXCL_RECURSIVE;
 
-	if( ( newDir.flags & (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check ) == 0
+	if( ( newDir.flags & DIRFLAG_EXCL_EXTENSION ) == 0
 		&& value.HasMember( "ExtensionRestrict" ) )
 	{
 		for( Value::ConstValueIterator it = value[ "ExtensionRestrict" ].Begin(); it != value[ "ExtensionRestrict" ].End(); ++it )

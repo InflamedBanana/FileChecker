@@ -8,6 +8,12 @@
 #include <rapidjson\document.h>
 #include <unordered_set>
 
+#define DIRFLAG_EXCL_NOMENCLATURE 1 << 0
+#define DIRFLAG_EXCL_EXTENSION 1 << 1
+#define DIRFLAG_EXCL_RECURSIVE 1 << 2
+
+
+
 class Settings
 {
 private:

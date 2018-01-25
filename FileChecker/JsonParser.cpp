@@ -57,27 +57,6 @@ void JSON_Parser::GenerateConfigFile( const string& filePath )
 		"						],\n"
 		"						\"Directories\" : []\n"
 		"					}\n"
-		/*"					{\n"
-		"						\"Name\":\"FileChecker\",\n"
-		"						\"Exclude_Nomenclature_Check\" : true,\n"
-		"						\"Exclude_Extension_Check\" : true,\n"
-		"						\"Exclude_Recursive_Checks\" : true,\n"
-		"						\"ExtensionRestrict\" :\n"
-		"						[\n"
-		"						],\n"
-		"						\"Directories\" : []\n"
-		"					},\n"
-		"\n"
-		"					{\n"
-		"						\"Name\":\"Bin\",\n"
-		"						\"Exclude_Nomenclature_Check\" : true,\n"
-		"						\"Exclude_Extension_Check\" : true,\n"
-		"						\"Exclude_Recursive_Checks\" : true,\n"
-		"						\"ExtensionRestrict\" :\n"
-		"						[\n"
-		"						],\n"
-		"						\"Directories\" : []\n"
-		"					}\n"*/
 		"				]\n"
 		"			}\n"
 		"		]\n"
@@ -87,9 +66,9 @@ void JSON_Parser::GenerateConfigFile( const string& filePath )
 	configFile.close();
 }
 
-Document JSON_Parser::ParseFile( const std::string& _filePath )
+bool JSON_Parser::ParseFile( const std::string& _filePath, Document* _doc )
 {
-	//if ( !ConfigFileExists( filePath ) ) // in case it's been deleted during
+	assert( _doc != nullptr );
 	if( !FileManipulator::PathExists( _filePath ) )
 		GenerateConfigFile( _filePath );
 
@@ -104,8 +83,13 @@ Document JSON_Parser::ParseFile( const std::string& _filePath )
 		while( getline( file, temp ) )
 			json.append( temp );
 	}
+	
+	_doc->Parse( json.c_str() );
 
-	Document doc;
-	doc.Parse( json.c_str() );
-	return doc;
+	return !_doc->IsNull();
+}
+
+bool JSON_Parser::CheckBoolValue( const rapidjson::Value & _value, const char* _name )
+{
+	return _value.HasMember(_name) && _value[_name].GetBool();
 }
