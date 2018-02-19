@@ -12,10 +12,9 @@
 			}
 		},
 
-		"MoveDirectory":
+		"Log_Options":
 		{
-			"Path" : "../Bin/",
-			"Move_Associated_Files" : [".meta"]
+			"Associated_Files" : [".meta"]
 		}
 	},
 
@@ -24,7 +23,7 @@
 		"Directories":
 		[
 			{
-				"Name":"../",
+				"Name":"B:/Projects/FileChecker/Test/Template test FileChecker",
 				"Exclude_Nomenclature_Check" : false,
 				"Exclude_Extension_Check" : false,
 				"Exclude_Recursive_Checks" : false,

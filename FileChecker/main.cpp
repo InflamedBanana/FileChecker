@@ -7,7 +7,7 @@ int main()
 {
 	if ( !Application::Start() )
 	{
-		std::cout << "Start Application Failed...";
+		std::cout << "Start Application Failed..." << std::endl;
 		system("PAUSE");
 		return -1;
 	}

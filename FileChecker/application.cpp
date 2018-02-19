@@ -127,14 +127,12 @@ void Application::NavigateThroughDirectories()
 	string startPath( "" );
 	CheckDirectory( startPath, m_settings.GetArborescenceRootDirectory(), badFiles );
 
-	m_settings.MoveToBin( badFiles, true );
+	m_settings.WriteLogs( badFiles, true );
+	//m_settings.MoveToBin( badFiles, true );
 }
 
 void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
 {
-	if( _directory.name == "Bin" || _directory.name == "FileChecker" ) // replace by DirectoryConfig of StartPath
-		return;
-
 	_path.append( _directory.name );
 	if( _path.back() != '/' ) _path.append( "/" );
 

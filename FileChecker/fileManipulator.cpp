@@ -1,5 +1,7 @@
 #include "fileManipulator.h"
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 namespace FileManipulator
 {
@@ -100,5 +102,17 @@ namespace FileManipulator
 	bool PathExists( const std::string & _path )
 	{
 		return fs::exists( _path );;
+	}
+
+	bool CreateTextFile( const std::string& _path, const std::string& _name, const std::stringstream& _textStream )
+	{
+		ofstream newFile( _path + _name + ".txt" );
+
+		if( !newFile )
+			return false;
+		
+		newFile << _textStream.rdbuf();
+		newFile.close();
+		return true;
 	}
 }

@@ -1,12 +1,15 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include "settings.h"
 #include <fstream>
 #include "JsonParser.h"
 #include <iostream>
 #include "fileManipulator.h"
 #include "application_paths.h"
+#include <sstream>
+#include <time.h>
 
 using namespace rapidjson;
-
 
 Settings::Settings( const std::string& filePath )
 {
@@ -15,22 +18,53 @@ Settings::Settings( const std::string& filePath )
 
 Settings::~Settings() {}
 
-void Settings::MoveToBin( const std::unordered_set<std::string>& _files, const bool _logFiles )
+void Settings::WriteLogs( const std::unordered_set<std::string>& _files, const bool _logFiles )
 {
-	if( !FileManipulator::PathExists( BIN_DIRECTORY_PATH ) )
-		CreateBinDirectory();
+	if( !FileManipulator::PathExists( LOG_DIRECTORY_PATH ) )
+		FileManipulator::CreateDirectory( LOG_DIRECTORY_PATH );
 
-	for( const auto& file : _files )
-		FileManipulator::MoveFile( file, BIN_DIRECTORY_PATH );
+	std::stringstream logs("");
 
+	time_t currentTime( time( nullptr ) );
+	struct tm* timeInfos( localtime( &currentTime ) );
+	std::string timeStr;
+	timeStr.append( std::to_string( timeInfos->tm_mday ) + "_" 
+					+ std::to_string( timeInfos->tm_mon + 1) + "_" 
+					+ std::to_string( timeInfos->tm_hour ) + "_"
+					+ std::to_string( timeInfos->tm_min ) + "_" 
+					+ std::to_string( timeInfos->tm_sec ) );
+
+	logs << "---- Log file for the FileChecker tool ----" << std::endl;
+	logs << " - Report from " << asctime( timeInfos ) << " : " << _files.size() << " wrong files." << std::endl << std::endl;
+
+	for( const auto& text : _files )
+		logs << text.c_str() << std::endl;
+	std::string fileName( "FileChecker_Logs_" );
+	fileName.append( timeStr );
+	
 	if( _logFiles )
 		LogFilesSentToBin( _files );
+
+	if( !FileManipulator::CreateTextFile( LOG_DIRECTORY_PATH, fileName, logs ) )
+		std::cout << "Couln't Create Log File..."<< std::endl;
 }
 
-void Settings::CreateBinDirectory()
-{
-	FileManipulator::CreateDirectory( BIN_DIRECTORY_PATH );
-}
+//void Settings::MoveToBin( const std::unordered_set<std::string>& _files, const bool _logFiles )
+//{
+//	if( !FileManipulator::PathExists( BIN_DIRECTORY_PATH ) )
+//		CreateBinDirectory();
+//
+//	for( const auto& file : _files )
+//		FileManipulator::MoveFile( file, BIN_DIRECTORY_PATH );
+//
+//	if( _logFiles )
+//		LogFilesSentToBin( _files );
+//}
+
+//void Settings::CreateBinDirectory()
+//{
+//	FileManipulator::CreateDirectory( BIN_DIRECTORY_PATH );
+//}
 
 void Settings::LogFilesSentToBin( const std::unordered_set<std::string>& _files )
 {
@@ -95,18 +129,18 @@ bool Settings::LoadSettings( const std::string& _filePath )
 			}
 		}
 
-		if( parentValue->HasMember( "MoveDirectory" ) )
+		if( parentValue->HasMember( "Log_Options" ) )
 		{
-			childValue = &( *parentValue )[ "MoveDirectory" ];
-			if( childValue->HasMember( "Path" ) )
+			childValue = &( *parentValue )[ "Log_Options" ];
+			/*if( childValue->HasMember( "Path" ) )
 			{
 				const Value& moveDirectoryPath( (*childValue)[ "Path" ] );
 				m_moveDirectoryPath = moveDirectoryPath.GetString();
-			}
+			}*/
 
-			if( childValue->HasMember( "Move_Associated_Files" ) )
+			if( childValue->HasMember( "Associated_Files" ) )
 			{
-				const Value& associatedFile( (*childValue)[ "Move_Associated_Files" ] );
+				const Value& associatedFile( (*childValue)[ "Associated_Files" ] );
 
 				for( Value::ConstValueIterator mit = associatedFile.Begin(); mit != associatedFile.End(); ++mit )
 					m_associatedFiles.push_back( mit->GetString() );
@@ -128,20 +162,20 @@ bool Settings::LoadSettings( const std::string& _filePath )
 				m_arborescenceRootDirectory = CreateDirectoryConfig( ( *it ) );
 			}
 
-			//Move That somewhere else
-			DirectoryConfig binDirectory;
+			////Move That somewhere else
+			//DirectoryConfig binDirectory;
 
-			int flags = (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check | (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check
-				| (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
-			
-			binDirectory.flags = flags;
-			binDirectory.name = "Bin";
-			m_arborescenceRootDirectory.subDirectories.push_back( binDirectory );
+			//int flags = (int)DirectoryConfig::DirectoryFlags::Exclude_Extension_Check | (int)DirectoryConfig::DirectoryFlags::Exclude_Nomenclature_Check
+			//	| (int)DirectoryConfig::DirectoryFlags::Exclude_Recursive_Check;
+			//
+			//binDirectory.flags = flags;
+			//binDirectory.name = "Bin";
+			//m_arborescenceRootDirectory.subDirectories.push_back( binDirectory );
 
-			DirectoryConfig fileDirectory;
-			fileDirectory.flags = flags;
-			fileDirectory.name = "FileChecker";
-			m_arborescenceRootDirectory.subDirectories.push_back( fileDirectory );
+			//DirectoryConfig fileDirectory;
+			//fileDirectory.flags = flags;
+			//fileDirectory.name = "FileChecker";
+			//m_arborescenceRootDirectory.subDirectories.push_back( fileDirectory );
 
 			//m_arborescenceRootDirectory
 		}

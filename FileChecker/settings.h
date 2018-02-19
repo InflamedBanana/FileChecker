@@ -16,9 +16,6 @@
 
 class Settings
 {
-private:
-
-
 public:
 
 	struct DirectoryConfig
@@ -56,12 +53,13 @@ public:
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::vector<std::string> GetAssociatedFiles() const { return m_associatedFiles; }
 
-	void MoveToBin( const std::unordered_set<std::string>& _files,const bool _logFiles = true);
+	//void MoveToBin( const std::unordered_set<std::string>& _files, const bool _logFiles = true);
+	void WriteLogs( const std::unordered_set<std::string>& _files, const bool _logFiles = true );
 
 private:
 	bool LoadSettings( const std::string& filePath );
 	DirectoryConfig CreateDirectoryConfig( const rapidjson::Value& value );
-	void CreateBinDirectory();
+	//void CreateBinDirectory();
 	void LogFilesSentToBin( const std::unordered_set<std::string>& _files );
 	//void SaveSetting(const std::string& filePath); when there is an interface
 
