@@ -6,43 +6,98 @@
 			"Separator" : "_",
 			"Definitions":
 			{
-				"Prefix": [""],
-				"Type" : [""],
-				"Name" : [""]
+				"Prefix": ["Test"],
+				"Type" : ["Mat"],
+				"Name" : []
 			}
 		},
 
-		"MoveDirectory":
-		{
-			"Path" : "../Bin/"
-		}
+		"Associated_Files" : [".meta"],
+		"Directory_Names_Exceptions" : ["Local"]
 	},
 
 	"Arborescence":
 	{
-		"StartPath":"../",
 		"Directories":
 		[
 			{
-				"Name":"FileChecker",
-				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : true,
-				"ExcludeRecursiveChecks" : true,
+				"Name":"B:/Projects/FileChecker/Test/Template test FileChecker",
+				"Exclude_Nomenclature_Check" : false,
+				"Exclude_Extension_Check" : false,
+				"Exclude_Recursive_Checks" : false,
 				"ExtensionRestrict" :
 				[
 				],
-				"Directories" : []
-			},
-
-			{
-				"Name":"Bin",
-				"ExcludeFromNomenclatureCheck" : true,
-				"ExcludeFromExtensionCheck" : true,
-				"ExcludeRecursiveChecks" : true
-,				"ExtensionRestrict" :
+				"Directories" : 
 				[
-				],
-				"Directories" : []
+					{
+						"Name":"Materials",
+						"Exclude_Nomenclature_Check" : false,
+						"Exclude_Extension_Check" : false,
+						"Exclude_Recursive_Checks" : true,
+						"ExtensionRestrict" :
+						[
+							".txt"
+						],
+						"Directories" : 
+						[
+							{
+								"Name":"Scripts",
+								"Exclude_Nomenclature_Check" : true,
+								"Exclude_Extension_Check" : true,
+								"Exclude_Recursive_Checks" : true,
+								"ExtensionRestrict" :
+								[
+								],
+								"Directories" : 
+								[
+									
+								]
+							},
+
+							{
+								"Name":"SecondScript",
+								"Exclude_Nomenclature_Check" : true,
+								"Exclude_Extension_Check" : true,
+								"Exclude_Recursive_Checks" : true,
+								"ExtensionRestrict" :
+								[
+								],
+								"Directories" : 
+								[
+									
+								]
+							}
+						]
+					},
+					
+					{
+						"Name":"OtherTest",
+						"Exclude_Nomenclature_Check" : true,
+						"Exclude_Extension_Check" : true,
+						"Exclude_Recursive_Checks" : true,
+						"ExtensionRestrict" :
+						[
+						],
+						"Directories" : 
+						[
+							
+						]
+					},
+					{
+						"Name":"Local",
+						"Exclude_Nomenclature_Check" : true,
+						"Exclude_Extension_Check" : true,
+						"Exclude_Recursive_Checks" : true,
+						"ExtensionRestrict" :
+						[
+						],
+						"Directories" : 
+						[
+							
+						]
+					}
+				]
 			}
 		]
 	}

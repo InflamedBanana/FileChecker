@@ -12,10 +12,8 @@
 			}
 		},
 
-		"Log_Options":
-		{
-			"Associated_Files" : [".meta"]
-		}
+		"Associated_Files" : [".meta"],
+		"Directory_Names_Exceptions" : ["Local"]
 	},
 
 	"Arborescence":
@@ -70,6 +68,20 @@
 									
 								]
 							}
+						]
+					},
+					
+					{
+						"Name":"OtherTest",
+						"Exclude_Nomenclature_Check" : true,
+						"Exclude_Extension_Check" : true,
+						"Exclude_Recursive_Checks" : true,
+						"ExtensionRestrict" :
+						[
+						],
+						"Directories" : 
+						[
+							
 						]
 					}
 				]

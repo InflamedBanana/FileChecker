@@ -72,13 +72,21 @@ namespace Nomenclature
 namespace Arborescence
 {
 	void CheckArborescence( const string& _path, const Settings::DirectoryConfig& _directory,
-							unordered_set<string>& _badFiles, const vector<string>& _associatedFiles )
+							unordered_set<string>& _badFiles, const vector<string>& _associatedFiles,
+							const std::vector<std::string>& _exceptions )
 	{
 		vector<string> explorerSubDirs = FileManipulator::GetDirectoriesAtPath( _path );
 
+		for( const auto& exception : _exceptions )
+		{
+			vector<string>::iterator pos = find( explorerSubDirs.begin(), explorerSubDirs.end(), exception );
+
+			if(pos != explorerSubDirs.end() )
+				explorerSubDirs.erase( pos );
+		}
+
 		for( const auto& arboSubDir : _directory.subDirectories )
 		{
-			cout << "arbo check : " << arboSubDir.name << endl;
 			if( !FileManipulator::DirectoryContainsFile( _path, _path + arboSubDir.name ) )
 				FileManipulator::CreateDirectory( _path + arboSubDir.name );
 			else

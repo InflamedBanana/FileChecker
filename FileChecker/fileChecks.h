@@ -15,7 +15,8 @@ namespace Nomenclature
 namespace Arborescence
 {
 	void CheckArborescence( const std::string& _path, const Settings::DirectoryConfig& _directory,
-							std::unordered_set<std::string>& _badFiles, const std::vector<std::string>& _associatedFiles );
+							std::unordered_set<std::string>& _badFiles, const std::vector<std::string>& _associatedFiles,
+							const std::vector<std::string>& _exceptions );
 }
 
 namespace Extension

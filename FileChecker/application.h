@@ -36,7 +36,7 @@ private:
 	void ShowSettings();
 
 	void NavigateThroughDirectories();
-	void CheckDirectory( std::string& _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles );
+	void CheckDirectory( std::string _path, const Settings::DirectoryConfig& _directory, std::unordered_set<std::string>& _badFiles );
 
 	Settings   m_settings;
 	MenuItem   m_menuChoice;

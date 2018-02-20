@@ -131,19 +131,35 @@ void Application::NavigateThroughDirectories()
 	//m_settings.MoveToBin( badFiles, true );
 }
 
-void Application::CheckDirectory( string& _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
+void Application::CheckDirectory( string _path, const Settings::DirectoryConfig& _directory, unordered_set<string>& _badFiles )
 {
-	_path.append( _directory.name );
-	if( _path.back() != '/' ) _path.append( "/" );
+	if( m_settings.GetDirectoriesExceptions().size() > 0 )
+	{
+		vector<string>& exceptions = m_settings.GetDirectoriesExceptions();
+		if( any_of( exceptions.begin(), exceptions.end(),
+			[&_directory]( const string& _dirName ) { return _directory.name.compare( _dirName ) == 0; } ) )
+		{
+			cout << "Skip directory : " <<  _path << _directory.name << " => 'Exception' : " << endl << endl;
+			return;
+		}
+	}
 
-	Arborescence::CheckArborescence( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
+	_path.append( _directory.name + "/" );
+
+	cout << "Checking : " << _path << "..." << endl;
+
+
+	Arborescence::CheckArborescence( _path, _directory, _badFiles, m_settings.GetAssociatedFiles(), m_settings.GetDirectoriesExceptions() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Nomenclature_Check ) == 0 )
 		Nomenclature::CheckNomenclature( _path, m_settings.GetNomenclatureConfig(), _badFiles, m_settings.GetAssociatedFiles() );
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Extension_Check ) == 0 )
 		Extension::CheckFilesExtensions( _path, _directory, _badFiles, m_settings.GetAssociatedFiles() );
 	
 	if( ( _directory.flags & (int)DirectoryFlags::Exclude_Recursive_Check ) == (int)DirectoryFlags::Exclude_Recursive_Check )
+	{
+		cout << "Recursive Checking disabled." << endl << endl;
 		return;
+	}
 
 	for( const auto& subDir : _directory.subDirectories )
 		CheckDirectory( _path, subDir, _badFiles );

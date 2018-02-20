@@ -52,6 +52,7 @@ public:
 	NomenclatureConfig GetNomenclatureConfig() const { return m_nomenclatureConfig; }
 	std::string GetMoveDirectoryPath() const { return m_moveDirectoryPath; }
 	std::vector<std::string> GetAssociatedFiles() const { return m_associatedFiles; }
+	std::vector<std::string> GetDirectoriesExceptions() const { return m_directoriesExceptions; }
 
 	//void MoveToBin( const std::unordered_set<std::string>& _files, const bool _logFiles = true);
 	void WriteLogs( const std::unordered_set<std::string>& _files, const bool _logFiles = true );
@@ -67,6 +68,7 @@ private:
 	NomenclatureConfig m_nomenclatureConfig;
 	std::string m_moveDirectoryPath;
 	std::vector<std::string> m_associatedFiles;
+	std::vector<std::string> m_directoriesExceptions;
 };
 
 #endif

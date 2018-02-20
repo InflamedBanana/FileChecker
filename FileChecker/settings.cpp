@@ -68,7 +68,7 @@ void Settings::WriteLogs( const std::unordered_set<std::string>& _files, const b
 
 void Settings::LogFilesSentToBin( const std::unordered_set<std::string>& _files )
 {
-	std::cout << "------------ Check Report ------------" << std::endl;
+	std::cout << std::endl << "------------ Check Report ------------" << std::endl;
 	for( const auto& file : _files )
 		std::cout << file << std::endl;
 
@@ -129,23 +129,31 @@ bool Settings::LoadSettings( const std::string& _filePath )
 			}
 		}
 
-		if( parentValue->HasMember( "Log_Options" ) )
-		{
-			childValue = &( *parentValue )[ "Log_Options" ];
+		/*if( parentValue->HasMember( "Log_Options" ) )
+		{*/
+			//childValue = &( *parentValue )[ "Log_Options" ];
 			/*if( childValue->HasMember( "Path" ) )
 			{
 				const Value& moveDirectoryPath( (*childValue)[ "Path" ] );
 				m_moveDirectoryPath = moveDirectoryPath.GetString();
 			}*/
 
-			if( childValue->HasMember( "Associated_Files" ) )
+			if( parentValue->HasMember( "Associated_Files" ) )
 			{
-				const Value& associatedFile( (*childValue)[ "Associated_Files" ] );
+				const Value& associatedFile( (*parentValue)[ "Associated_Files" ] );
 
-				for( Value::ConstValueIterator mit = associatedFile.Begin(); mit != associatedFile.End(); ++mit )
+				for( auto mit = associatedFile.Begin(); mit != associatedFile.End(); ++mit )
 					m_associatedFiles.push_back( mit->GetString() );
 			}
-		}
+
+			if( parentValue->HasMember( "Directory_Names_Exceptions" ) )
+			{
+				const Value& directoriesExceptions( ( *parentValue )[ "Directory_Names_Exceptions" ] );
+
+				for( auto mit = directoriesExceptions.Begin(); mit != directoriesExceptions.End(); ++mit )
+					m_directoriesExceptions.push_back( mit->GetString() );
+			}
+		//}
 	}
 
 	if( parsedSettings->HasMember( "Arborescence" ) )
