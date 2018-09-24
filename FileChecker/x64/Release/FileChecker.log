@@ -1,8 +1,0 @@
-﻿  application.cpp
-  fileManipulator.cpp
-  main.cpp
-  PrefixChecker.cpp
-  Generating code
-  All 676 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  FileChecker.vcxproj -> B:\Projects\FileChecker\x64\Release\FileChecker.exe

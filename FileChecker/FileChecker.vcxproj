@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{2028D7A8-18DE-4074-806F-B74D41F50D7E}</ProjectGuid>
     <RootNamespace>FileChecker</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,7 +69,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>B:\cppincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>B:\cppincludes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -115,22 +120,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="application.cpp" />
-    <ClCompile Include="fileManipulator.cpp" />
-    <ClCompile Include="JsonParser.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="fileChecks.cpp" />
-    <ClCompile Include="settings.cpp" />
+    <ClInclude Include="src\application.h" />
+    <ClInclude Include="src\application_paths.h" />
+    <ClInclude Include="src\extensionChecker.h" />
+    <ClInclude Include="src\fileChecks.h" />
+    <ClInclude Include="src\fileManipulator.h" />
+    <ClInclude Include="src\JsonParser.h" />
+    <ClInclude Include="src\settings.h" />
+    <ClInclude Include="src\Status.h" />
+    <ClInclude Include="src\UString.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="application.h" />
-    <ClInclude Include="application_paths.h" />
-    <ClInclude Include="fileManipulator.h" />
-    <ClInclude Include="Status.h" />
-    <ClInclude Include="settings.h" />
-    <ClInclude Include="JsonParser.h" />
-    <ClInclude Include="fileChecks.h" />
-    <ClInclude Include="UString.h" />
+    <ClCompile Include="src\application.cpp" />
+    <ClCompile Include="src\fileChecks.cpp" />
+    <ClCompile Include="src\fileManipulator.cpp" />
+    <ClCompile Include="src\JsonParser.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\settings.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
