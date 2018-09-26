@@ -2,7 +2,7 @@
 
 A simple file checking console application. It looks in the settings arborescence for non-matching files and logs them out 
 ( Previously corrected them but it turned out to be a bad idea ).
-Settings are set via a json file created at first launch.
+Settings are set via a json ( rapidjson required to build ) file created at first launch.
 
 ### Includes :
 
